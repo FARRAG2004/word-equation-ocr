@@ -29,7 +29,7 @@ The installer downloads everything it needs by itself, per-user and without admi
 | Python 3.12 (python.org) | ~25 MB | Skipped if Python 3.12 is already installed |
 | PyTorch | ~2.5 GB with an NVIDIA GPU (CUDA), ~200 MB without | The CPU build is slower but works |
 | pix2tex and other libraries | ~300 MB | |
-| OCR model weights | ~115 MB | |
+| The two OCR models (pix2tex + pix2text-mfr) | ~230 MB | |
 
 Everything goes to `%LOCALAPPDATA%\EquationAddIn`. To remove it all, run `uninstall.bat` from that folder.
 
@@ -38,15 +38,29 @@ Everything goes to `%LOCALAPPDATA%\EquationAddIn`. To remove it all, run `uninst
 ## How it works
 
 ```
-picture ──► pix2tex (LaTeX-OCR, local GPU/CPU) ──► LaTeX ──► latex2mathml ──► MathML
-        ──► MML2OMML.XSL (ships with Office) ──► OMML ──► Range.InsertXML in Word
+picture ──► stage 1: pix2tex (local AI model, GPU/CPU)
+              confident (≥ 0.99)? ── yes ──────────────────────────┐
+              no ──► stage 2: pix2text-mfr-1.5 (local AI model, CPU) │
+                       confident (≥ 0.95)? ── yes ──────────────────┤
+                       no ──► keep picture + review comment          ▼
+                                     LaTeX ──► MathML ──► OMML (MML2OMML.XSL from Office) ──► Word
 ```
 
-- **Local server**: FastAPI on `127.0.0.1:8765`, endpoint `POST /ocr`. The add-in starts it in the background when Word opens.
-- **Verification** uses the OCR model's own token confidence (the geometric mean of the per-token probabilities, best of 3 scales). It does not compare pictures, because the rendered font never matches the source image.
-  - Confidence ≥ `EQ_THRESHOLD` (default 0.99): the picture is replaced with the equation.
-  - Below that, or if the LaTeX can't be converted: the picture stays, and a Word **comment** is added with the reason and the guessed LaTeX.
-  - Every image is sent to the OCR; there is no "is this an equation?" pre-filter. Each decision is logged to `ocr_log.jsonl` (with the old pre-filter's statistics) so a new filter can be built from real data.
+Both models are small, specialised AI models that only read equations. Everything runs on your PC, with no internet after install.
+
+| | pix2tex (stage 1) | pix2text-mfr-1.5 (stage 2) |
+|---|---|---|
+| Architecture | ViT + Transformer | TrOCR (vision encoder–decoder), ONNX |
+| Size | ~115 MB | ~115 MB |
+| Licence | MIT | MIT |
+| Used for | every image | only images stage 1 is unsure about (~23% on the benchmark) |
+
+- **On demand, no idle cost:** nothing runs while Word is just open. Clicking **Convert equation images** starts the local server (FastAPI on `127.0.0.1:8765`) and loads the models. The server shuts itself down after 5 idle minutes (`EQ_IDLE_EXIT`, in seconds) and frees all RAM and VRAM; it is also stopped when Word closes.
+- **Verification** uses each model's own token confidence (the geometric mean of per-token probabilities). Stage 1 also tries 3 scales and keeps the most confident reading. Pictures are never compared, because the rendered font never matches the source image.
+  - Stage 2 has its own threshold, `EQ_SECOND_THRESHOLD` (default 0.95). On non-equation pictures (photo, diagram, a line of text) it scored 0.30–0.94, so those are flagged rather than turned into "equations".
+  - Set `EQ_SECOND=0` to use pix2tex only.
+  - Flagged pictures stay in place, with a Word **comment** giving the reason and the guessed LaTeX.
+  - Every image is OCR'd; there is no "is this an equation?" pre-filter. Each decision is logged to `ocr_log.jsonl` so a filter can later be built from real data.
 - **Command-line version** (no Word needed):
   `%LOCALAPPDATA%\EquationAddIn\.venv\Scripts\python %LOCALAPPDATA%\EquationAddIn\convert.py input.docx output.docx [--no-verify]`
   `--no-verify` converts every readable image, which measures raw OCR accuracy separately from the verification step.
@@ -55,13 +69,14 @@ picture ──► pix2tex (LaTeX-OCR, local GPU/CPU) ──► LaTeX ──► l
 
 These numbers come from the 100-equation benchmark (`sample_100.docx`: 25 simple, 30 medium, 25 electrical, 20 hard), scored with `bench.py` against `samples/ground_truth_manual.json`, a hand transcription of the images:
 
-| Threshold | Replaced | Wrong among replaced | Precision | Correct but sent to review |
+| Pipeline | Replaced correctly | Replaced wrongly | Sent to review | Time for 100 (RTX 3060 laptop) |
 |---|---|---|---|---|
-| no verification | 99 | 19 | 80% | 0 |
-| 0.97 | 88 | 9 | 90% | 1 |
-| **0.99 (default)** | **77** | **2** | **97%** | **5** |
+| v1.1 – pix2tex only, threshold 0.99 | 75 | 2 | 23 | ~6 min in Word |
+| **v1.2 – pix2tex + pix2text-mfr (default)** | **96** | **4** | **0** | **~3.8 min** |
 
-Raw OCR accuracy is 80/100 (simple 20/25, medium 25/30, electrical 20/25, hard 15/20). The weakest cases are matrices, piecewise functions and arrow accents.
+On the 23 images pix2tex was unsure about, pix2text-mfr-1.5 read 21 correctly, while pix2tex got 5. The remaining errors are a dropped `%` (EQ-068), a misread `c_e` (EQ-071), a square root that doesn't cover the whole sum (EQ-047) and empty accents around a matrix (EQ-083, removed by the LaTeX cleanup).
+
+Models also evaluated: PP-FormulaNet_plus (PaddleOCR). It has strong published scores, but it needs PaddlePaddle (over 1 GB, from a download server that was unreliable during testing) and extra dependencies, so it was not adopted.
 
 ```powershell
 .venv\Scripts\python bench.py sample_100.docx ground_truth.json   # accuracy, per-category, threshold sweep

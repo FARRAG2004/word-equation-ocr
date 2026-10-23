@@ -11,3 +11,5 @@ ocr_log.jsonl
 samples/*.png
 samples/*.docx
 samples/out/
+models/
+.venv-*/

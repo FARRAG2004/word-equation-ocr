@@ -49,9 +49,9 @@ Step "Installing OCR libraries"
 & $venvPy -m pip install --quiet -r (Join-Path $home_ "requirements.txt")
 if ($LASTEXITCODE) { throw "Library install failed." }
 
-Step "Downloading OCR model weights and testing the pipeline"
+Step "Downloading the two OCR models (pix2tex ~115 MB, pix2text-mfr ~115 MB) and testing the pipeline"
 Push-Location (Join-Path $home_ "server")
-& $venvPy -c "import core; core.model(); print('OMML test:', core.latex_to_omml('E=mc^2')[:30], '...')"
+& $venvPy -c "import core, second; core.model(); second.load(); print('OMML test:', core.latex_to_omml('E=mc^2')[:30], '...')"
 $ok = -not $LASTEXITCODE
 Pop-Location
 if (-not $ok) { throw "Model/pipeline test failed." }

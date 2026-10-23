@@ -1,9 +1,15 @@
-"""Image -> LaTeX -> MathML -> OMML pipeline, verified by the OCR model's own token confidence."""
+"""Image -> LaTeX -> MathML -> OMML pipeline.
+
+Stage 1: pix2tex, accepted when its own token confidence >= THRESHOLD.
+Stage 2: images pix2tex is unsure about go to a second model (second.py, pix2text-mfr-1.5),
+accepted when its confidence >= SECOND_THRESHOLD; otherwise the image is flagged for review.
+"""
 import glob
 import io
 import json
 import math
 import os
+import re
 import time
 
 import numpy as np
@@ -15,6 +21,10 @@ from latex2mathml.converter import convert as latex_to_mathml
 # Tuned with bench.py on the 100-equation benchmark: 0.99 converts 77 with 2 wrong (97% precision);
 # 0.97 converts 88 with 9 wrong. A wrong silent replacement costs more than a flag.
 THRESHOLD = float(os.environ.get("EQ_THRESHOLD", "0.99"))
+# Second model: every correct benchmark reading scored >= 0.954; non-equation images
+# (photo, diagram, text line) scored 0.30-0.94, so they are flagged instead of converted.
+SECOND_THRESHOLD = float(os.environ.get("EQ_SECOND_THRESHOLD", "0.95"))
+USE_SECOND = os.environ.get("EQ_SECOND", "1") != "0"
 LOG_PATH = os.environ.get("EQ_LOG", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ocr_log.jsonl"))
 
 _model = None
@@ -104,6 +114,48 @@ def best_reading(rgb):
     return best
 
 
+FUNCS = "lim|det|sin|cos|tan|cot|sec|csc|sinh|cosh|tanh|ln|log|exp|arctan|arcsin|arccos|max|min|sup|inf|deg|dim|ker|gcd"
+# Tokenised models write "\operatorname { s i n }", "\cfrac", "\root 3 \of {27}", "\underset{x}{\lim}".
+TIDY = [
+    (r"\\protect\b\s*", ""),
+    (r"\\(operatorname\*?|mathrm)\s*\{\s*((?:[A-Za-z]\s*)+)\}", lambda m: "\\" + m.group(1) + "{" + re.sub(r"\s+", "", m.group(2)) + "}"),
+    (rf"\\(?:operatorname\*?|mathrm)\{{({FUNCS})\}}", r"\\\1"),
+    (r"\\cfrac", r"\\frac"),
+    (r"\\root\s*(\S+)\s*\\of\s*\{", r"\\sqrt[\1]{"),
+    (r"\\underset\s*\{((?:[^{}]|\{[^{}]*\})*)\}\s*\{\s*\\lim\s*\}", r"\\lim_{\1}"),
+    (r"\\mathrm\s*\{\s*~\s*((?:[A-Za-z]\s*)+)\}", lambda m: r"\text{ " + re.sub(r"\s+", "", m.group(1)) + "}"),
+    (r"\\left\\Vert|\\right\\Vert", r"\\|"),
+    (r"\\overset\s*\{(?:\s|\\ )*\}\s*", ""),     # empty accents around matrices
+    (r"_\s*\{(?:\s|\\ |_|\{|\})*\}\s*$", ""),
+]
+JUNK = re.compile(r"\\(?:newcommand|renewcommand|def|unitlength|begin\{picture\}|put|usepackage)\b")
+
+
+def tidy(latex):
+    for pat, rep in TIDY:
+        latex = re.sub(pat, rep, latex)
+    # a single line wrapped in \begin{aligned} ... \end{aligned} is just that line
+    m = re.fullmatch(r"\s*\\begin\{aligned\}\s*(.*?)\s*(?:\\\\)?\s*\\end\{aligned\}\s*", latex, re.S)
+    if m and "&" not in m.group(1) and "\\\\" not in m.group(1):
+        latex = m.group(1)
+    latex = latex.strip()
+    while latex.startswith("{") and latex.endswith("}") and balanced(latex[1:-1]):  # "{ whole equation }"
+        latex = latex[1:-1].strip()
+    return latex
+
+
+def balanced(s):
+    depth = 0
+    for i, ch in enumerate(s):
+        if ch == "{" and (i == 0 or s[i - 1] != "\\"):
+            depth += 1
+        elif ch == "}" and (i == 0 or s[i - 1] != "\\"):
+            depth -= 1
+            if depth < 0:
+                return False
+    return depth == 0
+
+
 M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
 RELATIONS = "=<>≤≥≠≈≡"
 
@@ -153,18 +205,41 @@ def process(image_bytes, verify=True, source=""):
         log({**entry, **{k: v for k, v in r.items() if k != "omml"}})
         return r
     entry["prefilter"] = prefilter_stats(to_gray(img))
-    latex, conf = best_reading(img.convert("RGB"))
-    conf = round(conf, 3)
-    try:
-        omml = latex_to_omml(latex)
-        if not verify:
-            status, reason = "converted", "verification disabled"
-        elif conf >= THRESHOLD:
-            status, reason = "converted", f"token confidence {conf} >= {THRESHOLD}"
+    rgb = img.convert("RGB")
+    latex, conf = best_reading(rgb)
+    latex, conf = tidy(latex), round(conf, 3)
+    omml = try_omml(latex)
+    engine = "pix2tex"
+    if omml and conf >= THRESHOLD:
+        status, reason = "converted", f"pix2tex confidence {conf} >= {THRESHOLD}"
+    elif USE_SECOND:
+        import second
+        l2, c2 = second.read(rgb)
+        l2, c2 = tidy(l2), round(c2, 3)
+        o2 = try_omml(l2)
+        entry["pix2tex"] = {"latex": latex, "confidence": conf}
+        latex, conf, omml, engine = l2, c2, o2, "pix2text-mfr"
+        if not o2:
+            status, reason = "flagged", "second model's LaTeX could not be converted to a Word equation"
+        elif JUNK.search(l2):
+            status, reason = "flagged", "second model output is not an equation"
+        elif c2 >= SECOND_THRESHOLD:
+            status, reason = "converted", f"pix2tex unsure ({entry['pix2tex']['confidence']}); second model confidence {c2} >= {SECOND_THRESHOLD}"
         else:
-            status, reason = "flagged", f"token confidence {conf} < {THRESHOLD}"
-    except Exception as e:
-        omml, status, reason = "", "flagged", f"LaTeX could not be converted to a Word equation: {e}"
-    r = {"status": status, "reason": reason, "latex": latex, "confidence": conf, "omml": omml}
+            status, reason = "flagged", f"both models unsure (pix2tex {entry['pix2tex']['confidence']}, second {c2} < {SECOND_THRESHOLD})"
+    elif not omml:
+        status, reason = "flagged", "LaTeX could not be converted to a Word equation"
+    else:
+        status, reason = "flagged", f"pix2tex confidence {conf} < {THRESHOLD}"
+    if not verify and omml and status == "flagged":
+        status, reason = "converted", f"verification disabled ({engine})"
+    r = {"status": status, "reason": reason, "latex": latex, "confidence": conf, "omml": omml, "engine": engine}
     log({**entry, **{k: v for k, v in r.items() if k != "omml"}})
     return r
+
+
+def try_omml(latex):
+    try:
+        return latex_to_omml(latex)
+    except Exception:
+        return ""

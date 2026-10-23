@@ -27,9 +27,10 @@ namespace EquationAddIn
 
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject() => new Ribbon();
 
+        // The OCR server is started only when the button is clicked and exits by itself when idle,
+        // so nothing heavy runs while Word is merely open.
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            if (!ServerAlive()) StartServer(); // warm up in the background so the first click is fast
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
