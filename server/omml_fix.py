@@ -126,10 +126,20 @@ def fix_limits(root):
             replace(s, el("limLow", base, el("lim", *list(s.find(M + "sub")))))
 
 
+def fix_slash(root):
+    """\\not is drawn with the big solidus U+29F8, which runs far below the letter; a normal "/"
+    overlaid on the letter matches it."""
+    for ph in root.iter(M + "phant"):
+        for t in ph.iter(M + "t"):
+            if t.text and "⧸" in t.text:
+                t.text = t.text.replace("⧸", "/")
+
+
 def fix(root):
     fix_accents(root)
     fix_delimited(root)
     fix_limits(root)
+    fix_slash(root)
     return root
 
 

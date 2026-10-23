@@ -116,8 +116,12 @@ for lx, w in ((r"\operatorname{rank}A=2", "rank"), (r"\mathbf{A}^{-1}=\frac{1}{\
     case(lx, upright(w), f"operator name {w} upright")
 
 # Feynman slash notation: "A/" with nothing to divide becomes A with a slash through it; real division untouched
+def slashed(r):
+    ph = list(r.iter(M + "phant"))
+    outside = text(r).replace("".join(text(p) for p in ph), "", 1)
+    return bool(ph) and all(text(p) == "/" for p in ph) and "/" not in outside
 case(r"\hat{D}^{2}=D^{2}+i\gamma^{5}(\partial_{5}A/)+i\{\varphi,\partial_{5}\}-\partial_{5}^{\ 2}.",
-     lambda r: "phant" in tags(r) and "/" not in text(r), "slashed A (Feynman notation)")
+     slashed, "slashed A: normal-size slash overlaid, none left after A")
 case(r"(\partial/ -m)\psi=0", lambda r: "phant" in tags(r), "slashed partial")
 case(r"v=s/t", lambda r: "phant" not in tags(r) and "/" in text(r), "real division a/b is untouched")
 case(r"x^{\ 2}+\partial_{5}{}^{2}", lambda r: " " not in text(r) and "sSubSup" in tags(r), "no stray space or empty base in scripts")
