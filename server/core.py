@@ -156,6 +156,10 @@ TIDY = [
     (rf"\\overset\{{({G})\}}\{{\\underset\{{({G})\}}\{{?\\({BIG})\}}?\}}", r"\\\3_{\2}^{\1}"),
     (rf"\\underset\{{({G})\}}\{{?\\({BIG})\}}?", r"\\\2_{\1}"),
     (r"\\mathop\s*=", "="),
+    # Feynman slash: neither model knows \not, both write "A/" with nothing to divide by -> A with a slash through it
+    (r"(\\[A-Za-z]+|[A-Za-z])/(?=\s*(?:[)\]},;=+\-|]|\\right|\\\}|$))", r"\\not{\1}"),
+    (r"([_^])\{\\ +", r"\1{"),                      # "^{\ 2}": a leading space inside a script
+    (r"(_\{[^{}]*\})\{\}\^", r"\1^"),                # "\partial_{5}{}^{2}" -> "\partial_{5}^{2}"
     (r"[_^]\{\s*(?:\\mathrm\{\s*\})?\s*\}", ""),     # empty sub/superscripts
     (r"\\mathbf\s*\{?\s*\\nabla\s*\}?", r"\\nabla"),
     (r"\\(mathbf|mathrm|mathcal|mathit|boldsymbol)\s+([A-Za-z0-9])", r"\\\1{\2}"),
