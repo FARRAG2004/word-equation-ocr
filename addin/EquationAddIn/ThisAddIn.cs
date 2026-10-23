@@ -1,0 +1,160 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Web.Script.Serialization;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using Word = Microsoft.Office.Interop.Word;
+
+namespace EquationAddIn
+{
+    public partial class ThisAddIn
+    {
+        const string Server = "http://127.0.0.1:8765";
+        static readonly XNamespace Pkg = "http://schemas.microsoft.com/office/2006/xmlPackage";
+        static readonly HttpClient Http = new HttpClient { Timeout = TimeSpan.FromMinutes(2) };
+        Process serverProcess;
+
+        // Folder holding .venv and server\ : set by install.ps1, or EQUATION_ADDIN_HOME for development.
+        static string Home =>
+            Environment.GetEnvironmentVariable("EQUATION_ADDIN_HOME")
+            ?? Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\EquationAddIn", "Home", null) as string
+            ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "equation-addin");
+
+        protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject() => new Ribbon();
+
+        private void ThisAddIn_Startup(object sender, System.EventArgs e)
+        {
+            if (!ServerAlive()) StartServer(); // warm up in the background so the first click is fast
+        }
+
+        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
+        {
+            try { if (serverProcess != null && !serverProcess.HasExited) serverProcess.Kill(); } catch { }
+        }
+
+        static bool ServerAlive()
+        {
+            try { return Http.GetAsync(Server + "/health").GetAwaiter().GetResult().IsSuccessStatusCode; }
+            catch { return false; }
+        }
+
+        void StartServer()
+        {
+            var python = Path.Combine(Home, ".venv", "Scripts", "python.exe");
+            if (!File.Exists(python)) return;
+            serverProcess = Process.Start(new ProcessStartInfo(python, "-m uvicorn app:app --host 127.0.0.1 --port 8765")
+            {
+                WorkingDirectory = Path.Combine(Home, "server"),
+                CreateNoWindow = true,
+                UseShellExecute = false,
+            });
+        }
+
+        void EnsureServer()
+        {
+            if (ServerAlive()) return;
+            if (serverProcess == null || serverProcess.HasExited) StartServer();
+            for (int i = 0; i < 120; i++)
+            {
+                Application.StatusBar = "Equation OCR: starting local server...";
+                if (ServerAlive()) return;
+                Thread.Sleep(1000);
+            }
+            throw new Exception("OCR server did not start. Check " + Home);
+        }
+
+        internal void ConvertActiveDocument()
+        {
+            EnsureServer();
+            var doc = Application.ActiveDocument;
+            var shapes = doc.InlineShapes.Cast<Word.InlineShape>()
+                .Where(s => s.Type == Word.WdInlineShapeType.wdInlineShapePicture
+                         || s.Type == Word.WdInlineShapeType.wdInlineShapeLinkedPicture)
+                .ToList();
+            int converted = 0, skipped = 0, flagged = 0;
+            Application.ScreenUpdating = false;
+            try
+            {
+                // Last to first so earlier ranges stay valid after replacement.
+                for (int i = shapes.Count - 1; i >= 0; i--)
+                {
+                    Application.StatusBar = $"Equation OCR: image {shapes.Count - i} of {shapes.Count}";
+                    var range = shapes[i].Range;
+                    var image = ImageBytes(range.WordOpenXML);
+                    if (image == null) { skipped++; continue; }
+                    var r = Ocr(image);
+                    var status = (string)r["status"];
+                    if (status == "converted")
+                    {
+                        range.InsertXML(FlatOpc((string)r["omml"]));
+                        converted++;
+                    }
+                    else if (status == "flagged")
+                    {
+                        doc.Comments.Add(range, $"Equation OCR: please review (confidence {r["confidence"]}).\nLaTeX guess: {r["latex"]}");
+                        flagged++;
+                    }
+                    else skipped++;
+                }
+            }
+            finally
+            {
+                Application.ScreenUpdating = true;
+                Application.StatusBar = "";
+            }
+            MessageBox.Show($"Converted: {converted}\nFlagged for review (commented): {flagged}\nSkipped (not equations): {skipped}",
+                "Equation OCR");
+        }
+
+        static byte[] ImageBytes(string flatOpc)
+        {
+            var part = XDocument.Parse(flatOpc).Root.Elements(Pkg + "part")
+                .FirstOrDefault(p => ((string)p.Attribute(Pkg + "contentType") ?? "").StartsWith("image/")
+                                  && !((string)p.Attribute(Pkg + "contentType")).Contains("wmf")
+                                  && !((string)p.Attribute(Pkg + "contentType")).Contains("emf"));
+            var data = part?.Element(Pkg + "binaryData")?.Value;
+            return data == null ? null : Convert.FromBase64String(data);
+        }
+
+        static Dictionary<string, object> Ocr(byte[] image)
+        {
+            using (var form = new MultipartFormDataContent())
+            {
+                form.Add(new ByteArrayContent(image), "image", "image.png");
+                var json = Http.PostAsync(Server + "/ocr", form).GetAwaiter().GetResult()
+                    .EnsureSuccessStatusCode().Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                return new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(json);
+            }
+        }
+
+        static string FlatOpc(string omml) =>
+            "<?xml version=\"1.0\" standalone=\"yes\"?>" +
+            "<pkg:package xmlns:pkg=\"http://schemas.microsoft.com/office/2006/xmlPackage\">" +
+            "<pkg:part pkg:name=\"/_rels/.rels\" pkg:contentType=\"application/vnd.openxmlformats-package.relationships+xml\"><pkg:xmlData>" +
+            "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">" +
+            "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"word/document.xml\"/>" +
+            "</Relationships></pkg:xmlData></pkg:part>" +
+            "<pkg:part pkg:name=\"/word/document.xml\" pkg:contentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml\"><pkg:xmlData>" +
+            "<w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\">" +
+            "<w:body><w:p>" + omml + "</w:p></w:body></w:document></pkg:xmlData></pkg:part></pkg:package>";
+
+        #region VSTO generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InternalStartup()
+        {
+            this.Startup += new System.EventHandler(ThisAddIn_Startup);
+            this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
+        }
+
+        #endregion
+    }
+}

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+bin/
+obj/
+dist/
+*.pfx
+*.user
+.vs/
+server.log
+samples/*.png
+samples/*.docx
+samples/out/

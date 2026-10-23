@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui">
+  <ribbon>
+    <tabs>
+      <tab id="EquationTab" label="Equations">
+        <group id="EquationGroup" label="Equation OCR">
+          <button id="ConvertButton" label="Convert equation images" size="large"
+                  imageMso="EquationInsertGallery" onAction="OnConvert"
+                  screentip="Replace equation pictures with editable Word equations (offline)" />
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>
