@@ -1,7 +1,7 @@
 """Local OCR server: uvicorn app:app --host 127.0.0.1 --port 8765
 
 Started on demand by the Word add-in; exits by itself after EQ_IDLE_EXIT seconds without
-requests (default 300), so the models only occupy RAM/VRAM while the tool is in use.
+requests (default 120), so the models only occupy RAM/VRAM while the tool is in use.
 """
 import os
 import threading
@@ -11,7 +11,7 @@ from fastapi import FastAPI, File, UploadFile
 
 import core
 
-IDLE_EXIT = float(os.environ.get("EQ_IDLE_EXIT", "300"))
+IDLE_EXIT = float(os.environ.get("EQ_IDLE_EXIT", "120"))
 app = FastAPI()
 last_used = time.monotonic()
 busy = 0

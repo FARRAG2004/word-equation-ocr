@@ -12,15 +12,28 @@ Free, open-source, **fully offline** Word add-in: it finds equation **images** i
 
 1. Download **`EquationAddIn-x.y.z.zip`** from [Releases](../../releases/latest) and unzip it.
 2. Close Word, then double-click **`install.bat`**.
-3. Open Word: you'll find an **Equations** tab with the **Convert equation images** button. The first time, Word may ask whether to install the customization: click **Install**.
+3. Open Word and go to the **Equations** tab. The first time, Word may ask whether to install the customization: click **Install**.
 
 <div dir="rtl">
 
 1. نزّل ملف **`EquationAddIn-x.y.z.zip`** من صفحة [Releases](../../releases/latest) وفك الضغط.
 2. اقفل Word، وبعدين دوس مرتين على **`install.bat`**.
-3. افتح Word. هتلاقي تبويب اسمه **Equations** وفيه زرار **Convert equation images**. أول مرة ممكن Word يسألك عن تثبيت الإضافة، دوس **Install**.
+3. افتح Word وادخل تبويب **Equations**. أول مرة ممكن Word يسألك عن تثبيت الإضافة، دوس **Install**.
 
 </div>
+
+## Using it in Word
+
+The **Equations** tab has three buttons: **Convert all**, **Convert selection** (only the pictures inside the selected text) and **Show panel**.
+
+The **Equation OCR** side panel shows:
+- live progress with the **time remaining**, and a **Cancel** button. Cancelling keeps every equation that was already finished.
+- the summary: ✓ converted · ⚠ to review · – skipped.
+- a list of every equation. **Click one to jump to it**, and hover to see why it was flagged.
+
+**Word stays responsive.** Pictures are read in the background, and the document is changed only at the end, all at once, so **one Ctrl+Z undoes the whole conversion**.
+
+**It stays out of the way.** The AI models start only when you convert, and run at below-normal priority (your other programs come first). They use about 1 GB of RAM while working and shut down 2 minutes after the last conversion. The clipboard is never touched: pix2tex's habit of copying each result to the clipboard is switched off.
 
 The installer downloads everything it needs by itself, per-user and without admin rights. It needs an internet connection **only during install**:
 
@@ -81,7 +94,8 @@ Run `.venv\Scripts\python tests\test_omml.py` for 53 structure tests covering ev
 - one-cell matrices, empty sub/superscripts, and `\operatorname{sin}`, rewritten as `\sin`;
 - the meaningless sequences both models produce for `%`.
 
-- **On demand, no idle cost:** nothing runs while Word is just open. Clicking **Convert equation images** starts the local server (FastAPI on `127.0.0.1:8765`) and loads the models. The server shuts itself down after 5 idle minutes (`EQ_IDLE_EXIT`, in seconds) and frees all RAM and VRAM; it is also stopped when Word closes.
+- **On demand, no idle cost:** nothing runs while Word is just open. Converting starts the local server (FastAPI on `127.0.0.1:8765`) and loads the models. The server shuts itself down after 2 idle minutes (`EQ_IDLE_EXIT`, in seconds) and frees all RAM and VRAM; it is also stopped when Word closes.
+- **Both models at once:** pix2text-mfr (CPU) runs in a background thread while pix2tex uses the GPU. When the two agree on pix2tex's first reading, pix2tex's extra scale readings are skipped. Result: ~2.4 s per image on an idle RTX 3060 laptop, 21% faster than v1.4. Because the server runs at below-normal priority, it slows down when other programs are busy (about 5 s per image with the processor already 60% loaded), instead of slowing them down.
 - **Confidence** is each model's own token confidence (the geometric mean of per-token probabilities); pix2tex also tries 3 scales and keeps its most confident reading. Pictures are never compared, because the rendered font never matches the source image.
   - On non-equation pictures (photo, diagram, a line of text) pix2text-mfr scored 0.30–0.94, below its 0.95 threshold (`EQ_SECOND_THRESHOLD`). So those are flagged rather than turned into "equations".
   - Set `EQ_SECOND=0` to use pix2tex only.

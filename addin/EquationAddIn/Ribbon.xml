@@ -4,9 +4,18 @@
     <tabs>
       <tab id="EquationTab" label="Equations">
         <group id="EquationGroup" label="Equation OCR">
-          <button id="ConvertButton" label="Convert equation images" size="large"
-                  imageMso="EquationInsertGallery" onAction="OnConvert"
-                  screentip="Replace equation pictures with editable Word equations (offline)" />
+          <button id="ConvertButton" label="Convert all" size="large"
+                  imageMso="EquationInsertGallery" onAction="OnConvertAll"
+                  screentip="Convert all equation pictures"
+                  supertip="Replaces every equation picture in this document with an editable Word equation. Runs on this PC, no internet needed. One Ctrl+Z undoes it." />
+          <button id="ConvertSelectionButton" label="Convert selection" size="large"
+                  imageMso="SelectAll" onAction="OnConvertSelection"
+                  screentip="Convert pictures in the selection"
+                  supertip="Only the equation pictures inside the selected text are converted." />
+          <button id="PaneButton" label="Show panel" size="large"
+                  imageMso="ReviewingPane" onAction="OnShowPane"
+                  screentip="Show the Equation OCR panel"
+                  supertip="Progress, results and the list of equations that need review." />
         </group>
       </tab>
     </tabs>

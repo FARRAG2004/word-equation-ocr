@@ -17,11 +17,17 @@ namespace EquationAddIn
                 return r.ReadToEnd();
         }
 
-        public void OnConvert(Office.IRibbonControl control)
+        public void OnConvertAll(Office.IRibbonControl control) => Run(() => Globals.ThisAddIn.Convert(selectionOnly: false));
+
+        public void OnConvertSelection(Office.IRibbonControl control) => Run(() => Globals.ThisAddIn.Convert(selectionOnly: true));
+
+        public void OnShowPane(Office.IRibbonControl control) => Run(() => Globals.ThisAddIn.ShowPane());
+
+        static void Run(Action action)
         {
             try
             {
-                Globals.ThisAddIn.ConvertActiveDocument();
+                action();
             }
             catch (Exception ex)
             {

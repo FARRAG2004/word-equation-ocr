@@ -49,8 +49,15 @@ def find_xsl():
 def model():
     global _model
     if _model is None:
+        import types
         import torch
+        import pix2tex.cli
         from pix2tex.cli import LatexOCR
+        # pix2tex copies every reading to the Windows clipboard, overwriting what the user copied
+        # and flooding the clipboard history. Never touch the user's clipboard.
+        pix2tex.cli.clipboard = types.SimpleNamespace(copy=lambda *args, **kwargs: None)
+        if os.environ.get("EQ_TORCH_THREADS"):
+            torch.set_num_threads(int(os.environ["EQ_TORCH_THREADS"]))
         _model = LatexOCR()
         _model.args.temperature = 1e-8  # greedy decoding: same image -> same LaTeX
         # With greedy decoding the chosen token is the arg-max, so its probability is the max softmax.
@@ -102,8 +109,9 @@ def read(im):
     return latex, math.exp(sum(math.log(max(p, 1e-9)) for p in probs) / len(probs))
 
 
-def best_reading(rgb):
-    """OCR at a few scales; keep the reading the model is most confident about."""
+def best_reading(rgb, good_enough=lambda latex: False):
+    """OCR at a few scales; keep the reading the model is most confident about.
+    Stops early when confident, or when good_enough(latex) (e.g. it matches the other model)."""
     best = ("", -1.0)
     for h in (None, 48, 64):
         im = rgb if h is None else ImageOps.expand(
@@ -111,9 +119,22 @@ def best_reading(rgb):
         latex, conf = read(im)
         if conf > best[1]:
             best = (latex, conf)
-        if best[1] >= 0.99:
+        if best[1] >= 0.99 or good_enough(latex):
             break
     return best
+
+
+_pool = None
+
+
+def second_in_background(rgb):
+    """Start pix2text-mfr (CPU) now, so it runs while pix2tex uses the GPU."""
+    global _pool
+    import second
+    from concurrent.futures import ThreadPoolExecutor
+    if _pool is None:
+        _pool = ThreadPoolExecutor(max_workers=1)
+    return _pool.submit(second.read, rgb)
 
 
 FUNCS = "lim|det|sin|cos|tan|cot|sec|csc|sinh|cosh|tanh|ln|log|exp|arctan|arcsin|arccos|max|min|sup|inf|deg|dim|ker|gcd"
@@ -170,14 +191,17 @@ def tidy(latex):
     latex = compact(latex)
     for pat, rep in TIDY:
         latex = re.sub(pat, rep, latex)
+    # a single line wrapped in \begin{aligned} ... \end{aligned} is just that line
+    m = re.fullmatch(r"\s*\\begin\{aligned\}\s*(.*?)\s*(?:\\\\)?\s*\\end\{aligned\}\s*", latex, re.S)
+    if m and "\\\\" not in m.group(1):
+        latex = m.group(1).replace("&", "")
+    # latex2mathml emits the "&" of an aligned environment unescaped (invalid XML): keep the rows, drop the alignment marks
+    latex = re.sub(r"\\begin\{aligned\}(.*?)\\end\{aligned\}",
+                   lambda m: r"\begin{array}{l}" + m.group(1).replace("&", "") + r"\end{array}", latex, flags=re.S)
     # a one-cell matrix (no "&", no row break) is just its content
     latex = re.sub(r"\\begin\{matrix\}(.*?)\\end\{matrix\}",
                    lambda m: m.group(0) if "&" in m.group(1) or "\\\\" in m.group(1).strip().removesuffix("\\\\")
                    else m.group(1).strip().removesuffix("\\\\"), latex, flags=re.S)
-    # a single line wrapped in \begin{aligned} ... \end{aligned} is just that line
-    m = re.fullmatch(r"\s*\\begin\{aligned\}\s*(.*?)\s*(?:\\\\)?\s*\\end\{aligned\}\s*", latex, re.S)
-    if m and "&" not in m.group(1) and "\\\\" not in m.group(1):
-        latex = m.group(1)
     latex = latex.strip()
     while latex.startswith("{") and latex.endswith("}") and balanced(latex[1:-1]):  # "{ whole equation }"
         latex = latex[1:-1].strip()
@@ -255,13 +279,21 @@ def process(image_bytes, verify=True, source=""):
         return r
     entry["prefilter"] = prefilter_stats(to_gray(img))
     rgb = img.convert("RGB")
-    raw1, conf = best_reading(rgb)
+    other = second_in_background(rgb) if USE_SECOND and CROSSCHECK else None
+    if other is not None:
+        from compare import canon
+
+        def same_as_other(lx):  # the second model agrees: no need for pix2tex's extra scales
+            return canon(tidy(lx)) == canon(tidy(other.result()[0]))
+        raw1, conf = best_reading(rgb, same_as_other)
+    else:
+        raw1, conf = best_reading(rgb)
     latex, conf = tidy(raw1), round(conf, 3)
     errors = []
     omml = try_omml(latex, errors)
     engine = "pix2tex"
-    if USE_SECOND and CROSSCHECK:
-        status, reason, latex, conf, omml, engine = cross_check(rgb, latex, conf, omml, entry, errors)
+    if other is not None:
+        status, reason, latex, conf, omml, engine = cross_check(other.result(), latex, conf, omml, entry, errors)
     elif omml and conf >= THRESHOLD:
         status, reason = "converted", f"pix2tex confidence {conf} >= {THRESHOLD}"
     elif USE_SECOND:
@@ -290,12 +322,11 @@ def process(image_bytes, verify=True, source=""):
     return r
 
 
-def cross_check(rgb, latex1, conf1, omml1, entry, errors):
+def cross_check(second_reading, latex1, conf1, omml1, entry, errors):
     """Both models read every image. When they agree the reading has been right every time on the
     benchmarks; when they disagree, pix2text-mfr is right far more often, so it wins if confident."""
-    import second
     from compare import canon
-    raw2, conf2 = second.read(rgb)
+    raw2, conf2 = second_reading
     latex2, conf2 = tidy(raw2), round(conf2, 3)
     omml2 = "" if JUNK.search(raw2) else try_omml(latex2, errors)
     entry["candidates"] = {"pix2tex": [latex1, conf1], "pix2text-mfr": [latex2, conf2]}

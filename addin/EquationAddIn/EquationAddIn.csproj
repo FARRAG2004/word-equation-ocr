@@ -203,6 +203,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Ribbon.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="EquationPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <EmbeddedResource Include="Ribbon.xml" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>

@@ -95,6 +95,10 @@ def upright_lim(r):
     return bool(lims) and all(x.find(f".//{M}sty") is not None for x in lims)
 case(r"\lim_{n\to\infty}\left(1+\frac{1}{n}\right)^n=e", upright_lim, "lim is upright")
 case(r"\begin{array}{c}x+2y=5\\3x-y=1\end{array}", lambda r: "eqArr" in tags(r) or "m" in tags(r), "system of equations")
+case(r"\begin{aligned}{\dot{x}_{1}}&{{}=a_{11}x_{1}+b_{1}u}\\{\dot{x}_{2}}&{{}=a_{21}x_{1}+b_{2}u}\\\end{aligned}",
+     lambda r: ("eqArr" in tags(r) or "m" in tags(r)) and "acc" in tags(r), "aligned system (second model's style)")
+case(r"\begin{aligned}{\sum_{n=1}^{\infty}\frac{1}{n^{2}}}&{{}=\frac{\pi^{2}}{6}}\\\end{aligned}",
+     lambda r: "nary" in tags(r) and "eqArr" not in tags(r), "one-line aligned is just the line")
 case(r"\int_0^\infty e^{-x^2}\,dx=\frac{\sqrt\pi}{2}", lambda r: "nary" in tags(r), "integral as n-ary")
 case(r"x^{-}+e^{-}", lambda r: "sSup" in tags(r), "a superscript minus is not an accent")
 
