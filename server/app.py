@@ -17,5 +17,5 @@ def health():
 
 
 @app.post("/ocr")
-async def ocr(image: UploadFile = File(...)):
-    return core.process(await image.read())
+async def ocr(image: UploadFile = File(...), verify: bool = True):
+    return core.process(await image.read(), verify=verify, source=image.filename or "")

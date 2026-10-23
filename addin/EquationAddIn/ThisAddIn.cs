@@ -96,7 +96,7 @@ namespace EquationAddIn
                     }
                     else if (status == "flagged")
                     {
-                        doc.Comments.Add(range, $"Equation OCR: please review (confidence {r["confidence"]}).\nLaTeX guess: {r["latex"]}");
+                        doc.Comments.Add(range, $"Equation OCR: please review ({r["reason"]}).\nLaTeX guess: {r["latex"]}");
                         flagged++;
                     }
                     else skipped++;
@@ -113,10 +113,9 @@ namespace EquationAddIn
 
         static byte[] ImageBytes(string flatOpc)
         {
+            // Every image goes to the server, which decides and logs why (unreadable formats included).
             var part = XDocument.Parse(flatOpc).Root.Elements(Pkg + "part")
-                .FirstOrDefault(p => ((string)p.Attribute(Pkg + "contentType") ?? "").StartsWith("image/")
-                                  && !((string)p.Attribute(Pkg + "contentType")).Contains("wmf")
-                                  && !((string)p.Attribute(Pkg + "contentType")).Contains("emf"));
+                .FirstOrDefault(p => ((string)p.Attribute(Pkg + "contentType") ?? "").StartsWith("image/"));
             var data = part?.Element(Pkg + "binaryData")?.Value;
             return data == null ? null : Convert.FromBase64String(data);
         }

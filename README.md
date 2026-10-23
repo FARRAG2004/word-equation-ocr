@@ -43,12 +43,29 @@ picture ──► pix2tex (LaTeX-OCR, local GPU/CPU) ──► LaTeX ──► l
 ```
 
 - **Local server**: FastAPI on `127.0.0.1:8765`, endpoint `POST /ocr`. The add-in starts it in the background when Word opens.
-- **Verification**: every result is rendered back to an image and compared with the original picture.
-  - Good match: the picture is replaced with the equation.
-  - Low match: the picture stays, and a Word **comment** is added with the guessed LaTeX for you to review.
-  - Not an equation (photos, diagrams): left alone.
+- **Verification** uses the OCR model's own token confidence (the geometric mean of the per-token probabilities, best of 3 scales). It does not compare pictures, because the rendered font never matches the source image.
+  - Confidence ≥ `EQ_THRESHOLD` (default 0.99): the picture is replaced with the equation.
+  - Below that, or if the LaTeX can't be converted: the picture stays, and a Word **comment** is added with the reason and the guessed LaTeX.
+  - Every image is sent to the OCR; there is no "is this an equation?" pre-filter. Each decision is logged to `ocr_log.jsonl` (with the old pre-filter's statistics) so a new filter can be built from real data.
 - **Command-line version** (no Word needed):
-  `%LOCALAPPDATA%\EquationAddIn\.venv\Scripts\python %LOCALAPPDATA%\EquationAddIn\convert.py input.docx output.docx`
+  `%LOCALAPPDATA%\EquationAddIn\.venv\Scripts\python %LOCALAPPDATA%\EquationAddIn\convert.py input.docx output.docx [--no-verify]`
+  `--no-verify` converts every readable image, which measures raw OCR accuracy separately from the verification step.
+
+## Accuracy
+
+These numbers come from the 100-equation benchmark (`sample_100.docx`: 25 simple, 30 medium, 25 electrical, 20 hard), scored with `bench.py` against `samples/ground_truth_manual.json`, a hand transcription of the images:
+
+| Threshold | Replaced | Wrong among replaced | Precision | Correct but sent to review |
+|---|---|---|---|---|
+| no verification | 99 | 19 | 80% | 0 |
+| 0.97 | 88 | 9 | 90% | 1 |
+| **0.99 (default)** | **77** | **2** | **97%** | **5** |
+
+Raw OCR accuracy is 80/100 (simple 20/25, medium 25/30, electrical 20/25, hard 15/20). The weakest cases are matrices, piecewise functions and arrow accents.
+
+```powershell
+.venv\Scripts\python bench.py sample_100.docx ground_truth.json   # accuracy, per-category, threshold sweep
+```
 
 Works best on clean digital documents (for example AI-generated ones) with LaTeX-style equation images. Scans and photos aren't supported yet.
 
