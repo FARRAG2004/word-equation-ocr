@@ -13,3 +13,4 @@ samples/*.docx
 samples/out/
 models/
 .venv-*/
+*.ocr_cache.json

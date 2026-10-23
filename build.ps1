@@ -21,7 +21,7 @@ $stage = Join-Path $root "dist\EquationAddIn-$Version"
 Remove-Item $stage, "$stage.zip" -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force "$stage\addin", "$stage\server" | Out-Null
 Copy-Item "$proj\bin\Release\*" "$stage\addin" -Exclude *.pdb
-Copy-Item "$root\server\app.py", "$root\server\core.py", "$root\server\second.py" "$stage\server"
+Copy-Item "$root\server\*.py" "$stage\server"
 Copy-Item "$root\convert.py", "$root\requirements.txt", "$root\installer\*" $stage
 Compress-Archive "$stage\*" "$stage.zip"
 Write-Host "Packaged $stage.zip"
