@@ -17,79 +17,11 @@ from pathlib import Path
 
 from docx import Document
 from docx.oxml.ns import qn
-from lxml import etree
-from latex2mathml.converter import convert as latex_to_mathml
 
 sys.path.insert(0, str(Path(__file__).parent / "server"))
 import core  # noqa: E402
 
-# Spellings that render identically; applied before comparison, after core.tidy() (which the
-# pipeline itself applies, so tokenised output like "\operatorname { s i n }" is already "\sin").
-SPELLINGS = [
-    (r"\{\\cal\s*([A-Za-z])\}", r"\\mathcal{\1}"),
-    (r"\\cal\s*([A-Za-z])", r"\\mathcal{\1}"),
-    (r"\\(?:,|;|:|!|quad|qquad|displaystyle|textstyle)", " "),
-    (r"\\left\.|\\right\.", ""),
-    (r"\\(?:left|right|bigl|bigr|Bigl|Bigr|big|Big)(?![A-Za-z])", ""),
-    (r"\\rightarrow", r"\\to"), (r"\\leq", r"\\le"), (r"\\geq", r"\\ge"), (r"\\neq", r"\\ne"),
-    (r"\\dfrac|\\tfrac", r"\\frac"),
-    (r"\\cdot\s*\\cdot\s*\\cdot", r"\\cdots"),
-    (r"\\mathrm\{~?([A-Za-z ]+)\}", r"\\text{\1}"),
-    (r"\\left\\Vert|\\right\\Vert|\\Vert", r"\\|"),
-    (r"\\mathbf\s*\{\s*\\nabla\s*\}", r"\\nabla"),
-    # aligned systems render like a one-column array; the "&" only sets the alignment point
-    (r"\\begin\{aligned\}", r"\\begin{array}{c}"), (r"\\end\{aligned\}", r"\\end{array}"),
-    (r"\\\\\s*\\end\{array\}", r"\\end{array}"),
-]
-
-
-def merge_numbers(root):
-    """'1 7' tokenises to <mn>1</mn><mn>7</mn>; treat it as <mn>17</mn>."""
-    for el in list(root.iter("mn")):
-        nxt = el.getnext()
-        while nxt is not None and nxt.tag == "mn":
-            el.text = (el.text or "") + (nxt.text or "")
-            el.getparent().remove(nxt)
-            nxt = el.getnext()
-
-
-def canon(latex):
-    """Canonical MathML string: attributes, spacing and redundant mrows removed."""
-    s = core.tidy(latex)
-    for pat, rep in SPELLINGS:
-        s = re.sub(pat, rep, s)
-    if r"\begin{array}{c}" in s and "&" in s and r"\begin{matrix}" not in s:
-        s = s.replace("&", "").replace("{ { } =", "{=")
-    try:
-        root = etree.fromstring(latex_to_mathml(s).encode())
-    except Exception:
-        return "PARSE_ERROR:" + re.sub(r"\s+", "", s)
-    for el in list(root.iter()):
-        if not isinstance(el.tag, str):
-            continue
-        el.tag = etree.QName(el).localname
-        el.attrib.clear()
-        if el.text:
-            el.text = el.text.strip()
-    for el in list(root.iter("mspace")):
-        el.getparent().remove(el)
-    for el in list(root.iter("mtext")):
-        if not (el.text or "").strip():
-            el.getparent().remove(el)
-    merge_numbers(root)
-    changed = True
-    while changed:  # unwrap <mrow> that has a single child or sits in a container that is already a row
-        changed = False
-        for el in list(root.iter("mrow")):
-            parent = el.getparent()
-            if parent is not None and (len(el) == 1 or parent.tag in ("mrow", "math", "mtd", "msqrt", "mstyle")):
-                i = parent.index(el)
-                for child in reversed(list(el)):
-                    parent.insert(i, child)
-                parent.remove(el)
-                changed = True
-    merge_numbers(root)
-    return etree.tostring(root, encoding="unicode")
+from compare import canon  # noqa: E402
 
 
 def load_truth(path):
@@ -108,7 +40,7 @@ def images_with_ids(docx_path):
     doc = Document(docx_path)
     label = None
     for p in doc.paragraphs:
-        m = re.match(r"(EQ-\d+)\s*\[(\w+)\]", p.text.strip())
+        m = re.match(r"(EQ-\d+)\s*\[([\w-]+)\]", p.text.strip())
         if m:
             label = m.groups()
         blip = p._p.find(f".//{qn('wp:inline')}//{qn('a:blip')}")

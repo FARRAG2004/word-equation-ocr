@@ -38,26 +38,35 @@ Everything goes to `%LOCALAPPDATA%\EquationAddIn`. To remove it all, run `uninst
 ## How it works
 
 ```
-picture ──► stage 1: pix2tex (local AI model, GPU/CPU)
-              confident (≥ 0.99)? ── yes ──────────────────────────┐
-              no ──► stage 2: pix2text-mfr-1.5 (local AI model, CPU) │
-                       confident (≥ 0.95)? ── yes ──────────────────┤
-                       no ──► keep picture + review comment          ▼
-                                     LaTeX ──► MathML ──► OMML (MML2OMML.XSL from Office) ──► Word
+picture ──► pix2tex (local AI model, GPU)  ─┐
+        └─► pix2text-mfr-1.5 (local AI, CPU) ┴─► cross-check:
+              both readings are the same equation?  ── yes ─► accept
+              no: pix2text-mfr confident (≥ 0.95)?  ── yes ─► accept its reading
+              no: pix2tex confident (≥ 0.99)?       ── yes ─► accept its reading
+              no ──► keep picture + review comment
+     accepted LaTeX ──► cleanup ──► MathML ──► OMML (MML2OMML.XSL from Office) ──► Word
 ```
 
 Both models are small, specialised AI models that only read equations. Everything runs on your PC, with no internet after install.
 
-| | pix2tex (stage 1) | pix2text-mfr-1.5 (stage 2) |
+| | pix2tex | pix2text-mfr-1.5 |
 |---|---|---|
 | Architecture | ViT + Transformer | TrOCR (vision encoder–decoder), ONNX |
 | Size | ~115 MB | ~115 MB |
 | Licence | MIT | MIT |
-| Used for | every image | only images stage 1 is unsure about (~23% on the benchmark) |
+| Reads correctly, alone (460 test images) | 312 | 429 |
+
+**Why the cross-check:** across both benchmarks the two models agreed on 300 images and were wrong on only 3 of them. When they disagree, pix2text-mfr is right far more often. "The same equation" is decided by comparing normalised MathML (`server/compare.py`), so harmless spelling differences such as `{\frac{a}{b}}` vs `\frac{a}{b}` count as agreement. Set `EQ_CROSSCHECK=0` for the faster v1.2 behaviour, where the second model only sees images pix2tex is unsure about.
+
+**Cleanup** (`core.tidy`) fixes model output that would render badly in Word:
+- tokenised spacing (`\mathbf { F }` loses its bold in conversion);
+- `\underset{}{\overset{}{\sum}}`, rewritten as a real n-ary sum;
+- one-cell matrices, empty sub/superscripts, and `\operatorname{sin}`, rewritten as `\sin`;
+- the meaningless sequences both models produce for `%`.
 
 - **On demand, no idle cost:** nothing runs while Word is just open. Clicking **Convert equation images** starts the local server (FastAPI on `127.0.0.1:8765`) and loads the models. The server shuts itself down after 5 idle minutes (`EQ_IDLE_EXIT`, in seconds) and frees all RAM and VRAM; it is also stopped when Word closes.
-- **Verification** uses each model's own token confidence (the geometric mean of per-token probabilities). Stage 1 also tries 3 scales and keeps the most confident reading. Pictures are never compared, because the rendered font never matches the source image.
-  - Stage 2 has its own threshold, `EQ_SECOND_THRESHOLD` (default 0.95). On non-equation pictures (photo, diagram, a line of text) it scored 0.30–0.94, so those are flagged rather than turned into "equations".
+- **Confidence** is each model's own token confidence (the geometric mean of per-token probabilities); pix2tex also tries 3 scales and keeps its most confident reading. Pictures are never compared, because the rendered font never matches the source image.
+  - On non-equation pictures (photo, diagram, a line of text) pix2text-mfr scored 0.30–0.94, below its 0.95 threshold (`EQ_SECOND_THRESHOLD`). So those are flagged rather than turned into "equations".
   - Set `EQ_SECOND=0` to use pix2tex only.
   - Flagged pictures stay in place, with a Word **comment** giving the reason and the guessed LaTeX.
   - Every image is OCR'd; there is no "is this an equation?" pre-filter. Each decision is logged to `ocr_log.jsonl` so a filter can later be built from real data.
@@ -67,20 +76,26 @@ Both models are small, specialised AI models that only read equations. Everythin
 
 ## Accuracy
 
-These numbers come from the 100-equation benchmark (`sample_100.docx`: 25 simple, 30 medium, 25 electrical, 20 hard), scored with `bench.py` against `samples/ground_truth_manual.json`, a hand transcription of the images:
+Two benchmarks, scored with `bench.py` (MathML-normalised comparison):
 
-| Pipeline | Replaced correctly | Replaced wrongly | Sent to review | Time for 100 (RTX 3060 laptop) |
-|---|---|---|---|---|
-| v1.1 – pix2tex only, threshold 0.99 | 75 | 2 | 23 | ~6 min in Word |
-| **v1.2 – pix2tex + pix2text-mfr (default)** | **96** | **4** | **0** | **~3.8 min** |
+1. **`sample_100.docx`**: 100 equations (25 simple, 30 medium, 25 electrical, 20 hard), with a hand-made ground truth in `samples/ground_truth_manual.json`.
+2. **`samples/physics_bench.docx`**: 60 physics and electrical equations, each rendered in 3 fonts (Computer Modern like KaTeX/MathJax, STIX like Times, DejaVu Sans) at 300 and 150 dpi, so 360 images with exact ground truth. Rebuild it with `samples/make_physics.py`.
 
-On the 23 images pix2tex was unsure about, pix2text-mfr-1.5 read 21 correctly, while pix2tex got 5. The remaining errors are a dropped `%` (EQ-068), a misread `c_e` (EQ-071), a square root that doesn't cover the whole sum (EQ-047) and empty accents around a matrix (EQ-083, removed by the LaTeX cleanup).
+| Pipeline | 100-equation set | 360 physics/electrical | Time per image (RTX 3060 laptop) |
+|---|---|---|---|
+| v1.1 – pix2tex only | 75 correct, 2 wrong, 23 review | – | ~3.5 s in Word |
+| v1.2 – pix2tex, then pix2text-mfr if unsure | 96 correct, 4 wrong | 292 correct (81%), 56 wrong, 12 review | ~1.5–2.1 s |
+| **v1.3 – cross-check + cleanup (default)** | **100 correct, 0 wrong** | **329 correct (91%), 24 wrong, 7 review** | **~1.6–2.7 s** |
 
-Models also evaluated: PP-FormulaNet_plus (PaddleOCR). It has strong published scores, but it needs PaddlePaddle (over 1 GB, from a download server that was unreliable during testing) and extra dependencies, so it was not adopted.
+Physics/electrical v1.3 readings by font: Computer Modern 116/120, STIX 109/120, DejaVu Sans 107/120. The main remaining errors are inherent to the fonts: `I` vs `l` in sans-serif, `f` read as `/` in STIX, and `ε` vs `ϵ`.
 
 ```powershell
-.venv\Scripts\python bench.py sample_100.docx ground_truth.json   # accuracy, per-category, threshold sweep
+.venv\Scripts\python bench.py samples\physics_bench.docx samples\ground_truth_physics.json --rerun
+.venv\Scripts\python samples\collect_scores.py BENCH.docx TRUTH.json xp.json      # both readings per image
+.venv\Scripts\python samples\analyse_scores.py xp.json=TRUTH.json                # compare decision rules
 ```
+
+Models also evaluated: PP-FormulaNet_plus (PaddleOCR). It has strong published scores, but it needs PaddlePaddle (over 1 GB, from a download server that was unreliable during testing) and extra dependencies, so it was not adopted.
 
 Works best on clean digital documents (for example AI-generated ones) with LaTeX-style equation images. Scans and photos aren't supported yet.
 

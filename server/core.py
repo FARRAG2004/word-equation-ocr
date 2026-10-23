@@ -25,6 +25,8 @@ THRESHOLD = float(os.environ.get("EQ_THRESHOLD", "0.99"))
 # (photo, diagram, text line) scored 0.30-0.94, so they are flagged instead of converted.
 SECOND_THRESHOLD = float(os.environ.get("EQ_SECOND_THRESHOLD", "0.95"))
 USE_SECOND = os.environ.get("EQ_SECOND", "1") != "0"
+# Cross-check: both models read every image (~30% slower, more accurate); 0 = second model only as fallback.
+CROSSCHECK = os.environ.get("EQ_CROSSCHECK", "1") != "0"
 LOG_PATH = os.environ.get("EQ_LOG", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ocr_log.jsonl"))
 
 _model = None
@@ -116,10 +118,26 @@ def best_reading(rgb):
 
 FUNCS = "lim|det|sin|cos|tan|cot|sec|csc|sinh|cosh|tanh|ln|log|exp|arctan|arcsin|arccos|max|min|sup|inf|deg|dim|ker|gcd"
 # Tokenised models write "\operatorname { s i n }", "\cfrac", "\root 3 \of {27}", "\underset{x}{\lim}".
+G = r"(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*"   # brace group content, two levels deep
+BIG = r"sum|prod|int|oint|iint|iiint|bigcup|bigcap"
 TIDY = [
     (r"\\protect\b\s*", ""),
+    (r"\\!", ""),                                   # negative space becomes an empty box in Word
     (r"\\(operatorname\*?|mathrm)\s*\{\s*((?:[A-Za-z]\s*)+)\}", lambda m: "\\" + m.group(1) + "{" + re.sub(r"\s+", "", m.group(2)) + "}"),
-    (rf"\\(?:operatorname\*?|mathrm)\{{({FUNCS})\}}", r"\\\1"),
+    # keep a space after the name: "\operatorname{sin}x" must become "\sin x", not "\sinx"
+    (rf"\\(?:operatorname\*?|mathrm|mathsf|textsf|textrm|text)\{{\s*({FUNCS})\s*(?:\\,)?\s*\}}\s*(?=(.?))",
+     lambda m: "\\" + m.group(1) + (" " if m.group(2).isalpha() else "")),
+    # limits written as \underset/\overset around \sum: Word needs a real n-ary operator
+    (rf"\\underset\{{({G})\}}\{{\\overset\{{({G})\}}\{{?\\({BIG})\}}?\}}", r"\\\3_{\1}^{\2}"),
+    (rf"\\overset\{{({G})\}}\{{\\underset\{{({G})\}}\{{?\\({BIG})\}}?\}}", r"\\\3_{\2}^{\1}"),
+    (rf"\\underset\{{({G})\}}\{{?\\({BIG})\}}?", r"\\\2_{\1}"),
+    (r"\\mathop\s*=", "="),
+    (r"[_^]\{\s*(?:\\mathrm\{\s*\})?\s*\}", ""),     # empty sub/superscripts
+    (r"\\mathbf\s*\{?\s*\\nabla\s*\}?", r"\\nabla"),
+    (r"\\(mathbf|mathrm|mathcal|mathit|boldsymbol)\s+([A-Za-z0-9])", r"\\\1{\2}"),
+    (r"\{\\(?:it|rm)\s+([^{}]*)\}", r"\1"),
+    # both models misread "%" after a number as one of these meaningless sequences (benchmark: 7 of 7)
+    (r"(\d)\s*(?:\\mathcal\{[YV]\}(?:_\{?0\}?)?|\\lnot\s*_\{?0\}?|\\rangle_\{\\mathrm\{c\}\})\s*$", r"\1\\%"),
     (r"\\cfrac", r"\\frac"),
     (r"\\root\s*(\S+)\s*\\of\s*\{", r"\\sqrt[\1]{"),
     (r"\\underset\s*\{((?:[^{}]|\{[^{}]*\})*)\}\s*\{\s*\\lim\s*\}", r"\\lim_{\1}"),
@@ -131,9 +149,28 @@ TIDY = [
 JUNK = re.compile(r"\\(?:newcommand|renewcommand|def|unitlength|begin\{picture\}|put|usepackage)\b")
 
 
+def compact(latex):
+    """Drop the spaces tokenised models put between every token. Math mode ignores them, but
+    latex2mathml does not: "\\mathbf { F }" loses its bold. Keep a space only where it ends a
+    command before a letter ("\\cdot d"), and leave \\text{...} untouched."""
+    out, last = [], ""
+    for text, tok in re.findall(r"(\\text\s*\{[^{}]*\})|(\\[A-Za-z]+\*?|\\.|\S)", latex):
+        tok = text or tok
+        if re.fullmatch(r"\\[A-Za-z]+\*?", last) and re.match(r"[A-Za-z]", tok):
+            out.append(" ")
+        out.append(tok)
+        last = tok
+    return "".join(out)
+
+
 def tidy(latex):
+    latex = compact(latex)
     for pat, rep in TIDY:
         latex = re.sub(pat, rep, latex)
+    # a one-cell matrix (no "&", no row break) is just its content
+    latex = re.sub(r"\\begin\{matrix\}(.*?)\\end\{matrix\}",
+                   lambda m: m.group(0) if "&" in m.group(1) or "\\\\" in m.group(1).strip().removesuffix("\\\\")
+                   else m.group(1).strip().removesuffix("\\\\"), latex, flags=re.S)
     # a single line wrapped in \begin{aligned} ... \end{aligned} is just that line
     m = re.fullmatch(r"\s*\\begin\{aligned\}\s*(.*?)\s*(?:\\\\)?\s*\\end\{aligned\}\s*", latex, re.S)
     if m and "&" not in m.group(1) and "\\\\" not in m.group(1):
@@ -206,11 +243,13 @@ def process(image_bytes, verify=True, source=""):
         return r
     entry["prefilter"] = prefilter_stats(to_gray(img))
     rgb = img.convert("RGB")
-    latex, conf = best_reading(rgb)
-    latex, conf = tidy(latex), round(conf, 3)
+    raw1, conf = best_reading(rgb)
+    latex, conf = tidy(raw1), round(conf, 3)
     omml = try_omml(latex)
     engine = "pix2tex"
-    if omml and conf >= THRESHOLD:
+    if USE_SECOND and CROSSCHECK:
+        status, reason, latex, conf, omml, engine = cross_check(rgb, latex, conf, omml, entry)
+    elif omml and conf >= THRESHOLD:
         status, reason = "converted", f"pix2tex confidence {conf} >= {THRESHOLD}"
     elif USE_SECOND:
         import second
@@ -236,6 +275,25 @@ def process(image_bytes, verify=True, source=""):
     r = {"status": status, "reason": reason, "latex": latex, "confidence": conf, "omml": omml, "engine": engine}
     log({**entry, **{k: v for k, v in r.items() if k != "omml"}})
     return r
+
+
+def cross_check(rgb, latex1, conf1, omml1, entry):
+    """Both models read every image. When they agree the reading has been right every time on the
+    benchmarks; when they disagree, pix2text-mfr is right far more often, so it wins if confident."""
+    import second
+    from compare import canon
+    raw2, conf2 = second.read(rgb)
+    latex2, conf2 = tidy(raw2), round(conf2, 3)
+    omml2 = "" if JUNK.search(raw2) else try_omml(latex2)
+    entry["candidates"] = {"pix2tex": [latex1, conf1], "pix2text-mfr": [latex2, conf2]}
+    if omml1 and omml2 and canon(latex1) == canon(latex2):
+        return "converted", "both models agree", latex1, max(conf1, conf2), omml1, "both"
+    if omml2 and conf2 >= SECOND_THRESHOLD:
+        return "converted", f"models disagree; pix2text-mfr confident ({conf2})", latex2, conf2, omml2, "pix2text-mfr"
+    if omml1 and conf1 >= THRESHOLD:
+        return "converted", f"models disagree; pix2tex confident ({conf1})", latex1, conf1, omml1, "pix2tex"
+    return "flagged", f"models disagree and neither is confident (pix2tex {conf1}, pix2text-mfr {conf2})", \
+        latex2 if omml2 else latex1, max(conf1, conf2), omml2 or omml1, "pix2text-mfr" if omml2 else "pix2tex"
 
 
 def try_omml(latex):

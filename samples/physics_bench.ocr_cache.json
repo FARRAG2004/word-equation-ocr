@@ -1,0 +1,3242 @@
+{
+ "EQ-001": {
+  "cat": "electrical-cm-300",
+  "latex": "U=IR",
+  "confidence": 0.986,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 13.12
+ },
+ "EQ-002": {
+  "cat": "electrical-cm-150",
+  "latex": "U=IR",
+  "confidence": 0.932,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.28
+ },
+ "EQ-003": {
+  "cat": "electrical-stix-300",
+  "latex": "U=IR",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.78
+ },
+ "EQ-004": {
+  "cat": "electrical-stix-150",
+  "latex": "U=IR",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.71
+ },
+ "EQ-005": {
+  "cat": "electrical-dejavu-300",
+  "latex": "U=IR",
+  "confidence": 0.993,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.78
+ },
+ "EQ-006": {
+  "cat": "electrical-dejavu-150",
+  "latex": "U=IR",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.72
+ },
+ "EQ-007": {
+  "cat": "electrical-cm-300",
+  "latex": "P=UI\\cos\\,\\varphi",
+  "confidence": 0.964,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.08
+ },
+ "EQ-008": {
+  "cat": "electrical-cm-150",
+  "latex": "P=UI\\cos\\varphi",
+  "confidence": 0.96,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.65
+ },
+ "EQ-009": {
+  "cat": "electrical-stix-300",
+  "latex": "P=UI{\\cos}\\;\\varphi",
+  "confidence": 0.963,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.53
+ },
+ "EQ-010": {
+  "cat": "electrical-stix-150",
+  "latex": "P=UI{\\cos}\\,\\varphi",
+  "confidence": 0.976,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.47
+ },
+ "EQ-011": {
+  "cat": "electrical-dejavu-300",
+  "latex": "P=Ul\\cos\\varphi",
+  "confidence": 0.962,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.75
+ },
+ "EQ-012": {
+  "cat": "electrical-dejavu-150",
+  "latex": "P=Ul\\cos\\,\\varphi",
+  "confidence": 0.934,
+  "omml_ok": true,
+  "status": "flagged",
+  "engine": "pix2text-mfr",
+  "seconds": 1.24
+ },
+ "EQ-013": {
+  "cat": "electrical-cm-300",
+  "latex": "Q=UI\\sin\\,\\varphi",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.71
+ },
+ "EQ-014": {
+  "cat": "electrical-cm-150",
+  "latex": "Q=UI{\\sin}\\,\\varphi",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.41
+ },
+ "EQ-015": {
+  "cat": "electrical-stix-300",
+  "latex": "Q=UI\\sin\\,\\varphi",
+  "confidence": 0.991,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.2
+ },
+ "EQ-016": {
+  "cat": "electrical-stix-150",
+  "latex": "Q=UI\\sin\\,\\varphi",
+  "confidence": 0.994,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.48
+ },
+ "EQ-017": {
+  "cat": "electrical-dejavu-300",
+  "latex": "Q=Ul\\sin\\,\\varphi",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.87
+ },
+ "EQ-018": {
+  "cat": "electrical-dejavu-150",
+  "latex": "Q=Ul\\sin\\,\\varphi",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.4
+ },
+ "EQ-019": {
+  "cat": "electrical-cm-300",
+  "latex": "S=\\sqrt{P^{2}+Q^{2}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2tex",
+  "seconds": 1.9
+ },
+ "EQ-020": {
+  "cat": "electrical-cm-150",
+  "latex": "S=\\sqrt{P^{2}+Q^{2}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.32
+ },
+ "EQ-021": {
+  "cat": "electrical-stix-300",
+  "latex": "S=\\sqrt{P^{2}+Q^{2}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.14
+ },
+ "EQ-022": {
+  "cat": "electrical-stix-150",
+  "latex": "S=\\sqrt{P^{2}+Q^{2}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.05
+ },
+ "EQ-023": {
+  "cat": "electrical-dejavu-300",
+  "latex": "S={\\sqrt{P^{2}+Q^{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.99
+ },
+ "EQ-024": {
+  "cat": "electrical-dejavu-150",
+  "latex": "S={\\sqrt{P^{2}+Q^{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.82
+ },
+ "EQ-025": {
+  "cat": "electrical-cm-300",
+  "latex": "X_{L}=\\omega L=2\\pi fL",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 33.57
+ },
+ "EQ-026": {
+  "cat": "electrical-cm-150",
+  "latex": "X_{L}=\\omega L=2\\pi fL",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.71
+ },
+ "EQ-027": {
+  "cat": "electrical-stix-300",
+  "latex": "X_{L}=\\omega L=2\\pi/L",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.4
+ },
+ "EQ-028": {
+  "cat": "electrical-stix-150",
+  "latex": "X_{L}=\\omega L=2\\pi/L",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.76
+ },
+ "EQ-029": {
+  "cat": "electrical-dejavu-300",
+  "latex": "X_{L}=\\omega L=2\\pi fL",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.33
+ },
+ "EQ-030": {
+  "cat": "electrical-dejavu-150",
+  "latex": "X_{L}=\\omega L=2\\pi fL",
+  "confidence": 0.981,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.68
+ },
+ "EQ-031": {
+  "cat": "electrical-cm-300",
+  "latex": "X_{C}={\\frac{1}{\\omega C}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.86
+ },
+ "EQ-032": {
+  "cat": "electrical-cm-150",
+  "latex": "X_{C}={\\frac{1}{\\omega C}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.83
+ },
+ "EQ-033": {
+  "cat": "electrical-stix-300",
+  "latex": "X_{C}=\\frac{1}{\\omega C}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.31
+ },
+ "EQ-034": {
+  "cat": "electrical-stix-150",
+  "latex": "X_{C}=\\frac{1}{\\omega C}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.8
+ },
+ "EQ-035": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\textstyle X_{C}={\\frac{1}{\\omega C}}",
+  "confidence": 0.994,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.85
+ },
+ "EQ-036": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\textstyle X_{C}={\\frac{1}{\\omega C}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.72
+ },
+ "EQ-037": {
+  "cat": "electrical-cm-300",
+  "latex": "Z={\\sqrt{R^{\\,2}+{\\left({{X}_{L}}-{{X}_{C}}\\right)}^{2}}}",
+  "confidence": 0.972,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 3.0
+ },
+ "EQ-038": {
+  "cat": "electrical-cm-150",
+  "latex": "Z={\\sqrt{R^{2}+(X_{L}-X_{C})^{2}}}",
+  "confidence": 0.986,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 3.02
+ },
+ "EQ-039": {
+  "cat": "electrical-stix-300",
+  "latex": "Z=\\sqrt{{{{R}^{\\,2}+\\left(X_{L}-X_{C}\\right)}^{2}}}",
+  "confidence": 0.964,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.84
+ },
+ "EQ-040": {
+  "cat": "electrical-stix-150",
+  "latex": "Z=\\sqrt{{{{R}^{\\,2}+\\left(X_{L}-X_{C}\\right)}^{2}}}",
+  "confidence": 0.954,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.57
+ },
+ "EQ-041": {
+  "cat": "electrical-dejavu-300",
+  "latex": "Z={\\sqrt{R^{2}+(X_{L}-X_{C})^{2}}}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.44
+ },
+ "EQ-042": {
+  "cat": "electrical-dejavu-150",
+  "latex": "Z=\\sqrt{R^{2}+(X_{L}-X_{C})^{2}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.36
+ },
+ "EQ-043": {
+  "cat": "electrical-cm-300",
+  "latex": "\\varphi=\\arctan\\,\\frac{X_{L}-X_{C}}{R}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.91
+ },
+ "EQ-044": {
+  "cat": "electrical-cm-150",
+  "latex": "\\varphi=\\arctan\\frac{X_{L}-X_{C}}{R}",
+  "confidence": 0.994,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.59
+ },
+ "EQ-045": {
+  "cat": "electrical-stix-300",
+  "latex": "\\varphi=\\arctan\\frac{X_{L}\\,-\\,X_{C}}{R}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.3
+ },
+ "EQ-046": {
+  "cat": "electrical-stix-150",
+  "latex": "\\varphi=\\arctan{\\frac{X_{L}-X_{C}}{R}}",
+  "confidence": 0.993,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.18
+ },
+ "EQ-047": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\varphi=\\arctan\\frac{X_{L}-X_{C}}{R}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 3.0
+ },
+ "EQ-048": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\varphi=\\arctan\\frac{X_{L}-X_{C}}{R}",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.81
+ },
+ "EQ-049": {
+  "cat": "electrical-cm-300",
+  "latex": "R_{eq}=R_{1}+R_{2}+R_{3}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.12
+ },
+ "EQ-050": {
+  "cat": "electrical-cm-150",
+  "latex": "R_{eq}=R_{1}+R_{2}+R_{3}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.03
+ },
+ "EQ-051": {
+  "cat": "electrical-stix-300",
+  "latex": "R_{eq}=R_{1}+R_{2}+R_{3}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.39
+ },
+ "EQ-052": {
+  "cat": "electrical-stix-150",
+  "latex": "R_{eq}=R_{1}+R_{2}+R_{3}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.87
+ },
+ "EQ-053": {
+  "cat": "electrical-dejavu-300",
+  "latex": "R_{eq}=R_{1}+R_{2}+R_{3}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.05
+ },
+ "EQ-054": {
+  "cat": "electrical-dejavu-150",
+  "latex": "R_{eq}=R_{1}+R_{2}+R_{3}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.19
+ },
+ "EQ-055": {
+  "cat": "electrical-cm-300",
+  "latex": "\\frac{1}{R_{eq}}=\\frac{1}{R_{1}}+\\frac{1}{R_{2}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.1
+ },
+ "EQ-056": {
+  "cat": "electrical-cm-150",
+  "latex": "\\frac{1}{R_{eq}}=\\frac{1}{R_{1}}+\\frac{1}{R_{2}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.34
+ },
+ "EQ-057": {
+  "cat": "electrical-stix-300",
+  "latex": "\\frac{1}{R_{eq}}=\\frac{1}{R_{1}}+\\frac{1}{R_{2}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.48
+ },
+ "EQ-058": {
+  "cat": "electrical-stix-150",
+  "latex": "\\frac{1}{R_{eq}}=\\frac{1}{R_{1}}+\\frac{1}{R_{2}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.53
+ },
+ "EQ-059": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\frac{1}{R_{eq}}=\\frac{1}{R_{1}}+\\frac{1}{R_{2}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.45
+ },
+ "EQ-060": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\frac{1}{R_{eq}}=\\frac{1}{R_{1}}+\\frac{1}{R_{2}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.25
+ },
+ "EQ-061": {
+  "cat": "electrical-cm-300",
+  "latex": "\\sum_{k=1}^{n}I_{k}=0",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.99
+ },
+ "EQ-062": {
+  "cat": "electrical-cm-150",
+  "latex": "\\sum_{k=1}^{n}I_{k}=0",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.83
+ },
+ "EQ-063": {
+  "cat": "electrical-stix-300",
+  "latex": "\\sum_{k=1}^{n}I_{k}=0",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.55
+ },
+ "EQ-064": {
+  "cat": "electrical-stix-150",
+  "latex": "\\sum_{k=1}^{n}I_{k}=0",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.16
+ },
+ "EQ-065": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\sum_{k=1}^{n}I_{k}=0",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.28
+ },
+ "EQ-066": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\sum_{k=1}^{n}I_{k}=0",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.15
+ },
+ "EQ-067": {
+  "cat": "electrical-cm-300",
+  "latex": "\\sum_{k=1}^{n}U_{k}=0",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.66
+ },
+ "EQ-068": {
+  "cat": "electrical-cm-150",
+  "latex": "\\sum_{k=1}^{n}U_{k}=0",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.23
+ },
+ "EQ-069": {
+  "cat": "electrical-stix-300",
+  "latex": "\\sum_{k\\implies1}^{n}U_{k}=0",
+  "confidence": 0.953,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.04
+ },
+ "EQ-070": {
+  "cat": "electrical-stix-150",
+  "latex": "\\sum_{k=1}^{n}U_{k}=0",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.09
+ },
+ "EQ-071": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\sum_{k=1}^{n}U_{k}=0",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.03
+ },
+ "EQ-072": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\sum_{k=1}^{n}U_{k}=0",
+  "confidence": 0.993,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.12
+ },
+ "EQ-073": {
+  "cat": "electrical-cm-300",
+  "latex": "i(t)=I_{m}\\sin(\\omega t+\\psi)",
+  "confidence": 0.975,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 9.94
+ },
+ "EQ-074": {
+  "cat": "electrical-cm-150",
+  "latex": "i(t)=I_{m}\\sin(\\omega t+\\psi)",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.68
+ },
+ "EQ-075": {
+  "cat": "electrical-stix-300",
+  "latex": "i(t)=I_{m}\\sin(\\omega t+\\psi)",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.79
+ },
+ "EQ-076": {
+  "cat": "electrical-stix-150",
+  "latex": "i(t)=I_{m}\\sin(\\omega t+\\psi)",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.64
+ },
+ "EQ-077": {
+  "cat": "electrical-dejavu-300",
+  "latex": "i(t)=I_{m}\\sin(\\omega t+\\psi)",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.06
+ },
+ "EQ-078": {
+  "cat": "electrical-dejavu-150",
+  "latex": "i(t)=I_{m}\\sin(\\omega t+\\psi)",
+  "confidence": 0.967,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.9
+ },
+ "EQ-079": {
+  "cat": "electrical-cm-300",
+  "latex": "U_{rms}={\\frac{U_{m}}{\\sqrt{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.65
+ },
+ "EQ-080": {
+  "cat": "electrical-cm-150",
+  "latex": "U_{rms}={\\frac{U_{m}}{\\sqrt{2}}}",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.87
+ },
+ "EQ-081": {
+  "cat": "electrical-stix-300",
+  "latex": "U_{rms}={\\frac{U_{m}}{\\sqrt{2}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.65
+ },
+ "EQ-082": {
+  "cat": "electrical-stix-150",
+  "latex": "U_{rms}={\\frac{U_{m}}{\\sqrt{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.7
+ },
+ "EQ-083": {
+  "cat": "electrical-dejavu-300",
+  "latex": "U_{rms}={\\frac{U_{m}}{\\sqrt{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.85
+ },
+ "EQ-084": {
+  "cat": "electrical-dejavu-150",
+  "latex": "U_{rms}={\\frac{U_{m}}{\\sqrt{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.44
+ },
+ "EQ-085": {
+  "cat": "electrical-cm-300",
+  "latex": "{\\boldsymbol{\\tau}}={\\boldsymbol{RC}}",
+  "confidence": 0.969,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.09
+ },
+ "EQ-086": {
+  "cat": "electrical-cm-150",
+  "latex": "\\tau=RC",
+  "confidence": 0.975,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.94
+ },
+ "EQ-087": {
+  "cat": "electrical-stix-300",
+  "latex": "{\\boldsymbol{\\tau}}={\\boldsymbol{RC}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.15
+ },
+ "EQ-088": {
+  "cat": "electrical-stix-150",
+  "latex": "{\\boldsymbol{\\tau}}={\\boldsymbol{RC}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.09
+ },
+ "EQ-089": {
+  "cat": "electrical-dejavu-300",
+  "latex": "{\\boldsymbol{\\tau}}={\\boldsymbol{RC}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.92
+ },
+ "EQ-090": {
+  "cat": "electrical-dejavu-150",
+  "latex": "{\\boldsymbol{\\tau}}={\\boldsymbol{RC}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.86
+ },
+ "EQ-091": {
+  "cat": "electrical-cm-300",
+  "latex": "u_{C}(t)=U_{0}{}^{(1-e^{\\,-t/\\tau})}",
+  "confidence": 0.951,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.47
+ },
+ "EQ-092": {
+  "cat": "electrical-cm-150",
+  "latex": "{u_{C}}(t)={U_{0}}^{\\left(1-e^{\\,-t/\\tau}\\right)}",
+  "confidence": 0.954,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.52
+ },
+ "EQ-093": {
+  "cat": "electrical-stix-300",
+  "latex": "u_{C}(t)=U_{0}(1-e^{-t/\\tau})",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.17
+ },
+ "EQ-094": {
+  "cat": "electrical-stix-150",
+  "latex": "u_{C}(t)=U_{0}(1-e^{-t/\\tau})",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.28
+ },
+ "EQ-095": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\boldsymbol{u}_{C}(t)=\\boldsymbol{U}_{0}(\\boldsymbol{1}-\\boldsymbol{e}^{-t/\\tau})",
+  "confidence": 0.961,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 3.39
+ },
+ "EQ-096": {
+  "cat": "electrical-dejavu-150",
+  "latex": "u_{C}(t)=U_{0}(\\mathbf{1}-e^{-t/\\tau})",
+  "confidence": 0.953,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.46
+ },
+ "EQ-097": {
+  "cat": "electrical-cm-300",
+  "latex": "\\eta=\\frac{P_{2}}{P_{1}}\\cdot100\\%",
+  "confidence": 0.984,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.89
+ },
+ "EQ-098": {
+  "cat": "electrical-cm-150",
+  "latex": "\\eta=\\frac{P_{2}}{P_{1}}\\cdot100\\%",
+  "confidence": 0.973,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.49
+ },
+ "EQ-099": {
+  "cat": "electrical-stix-300",
+  "latex": "\\eta=\\frac{P_{2}}{P_{1}}\\cdot100\\%",
+  "confidence": 0.978,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 3.83
+ },
+ "EQ-100": {
+  "cat": "electrical-stix-150",
+  "latex": "\\eta=\\frac{P_{2}}{P_{1}}\\cdot100\\mathcal{Z}",
+  "confidence": 0.974,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.74
+ },
+ "EQ-101": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\eta=\\frac{P_{2}}{P_{1}}\\cdot\\boldsymbol{1}\\boldsymbol{0}\\boldsymbol{0}\\boldsymbol{9}_{0}",
+  "confidence": 0.984,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.45
+ },
+ "EQ-102": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\eta=\\frac{P_{2}}{P_{1}}\\cdot\\boldsymbol{1}\\boldsymbol{0}\\boldsymbol{0}\\boldsymbol{9}_{\\boldsymbol{0}}",
+  "confidence": 0.971,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.68
+ },
+ "EQ-103": {
+  "cat": "electrical-cm-300",
+  "latex": "E=c_{e}\\Phi n",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.82
+ },
+ "EQ-104": {
+  "cat": "electrical-cm-150",
+  "latex": "E=c_{e}\\Phi n",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.67
+ },
+ "EQ-105": {
+  "cat": "electrical-stix-300",
+  "latex": "E=c_{e}\\Phi n",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.8
+ },
+ "EQ-106": {
+  "cat": "electrical-stix-150",
+  "latex": "E=c_{e}\\Phi n",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.61
+ },
+ "EQ-107": {
+  "cat": "electrical-dejavu-300",
+  "latex": "E=c_{e}\\Phi n",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.29
+ },
+ "EQ-108": {
+  "cat": "electrical-dejavu-150",
+  "latex": "E=c_{e}\\Phi n",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.26
+ },
+ "EQ-109": {
+  "cat": "electrical-cm-300",
+  "latex": "M=c_{M}\\Phi I_{a}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 5.58
+ },
+ "EQ-110": {
+  "cat": "electrical-cm-150",
+  "latex": "M=c_{M}\\Phi I_{a}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.48
+ },
+ "EQ-111": {
+  "cat": "electrical-stix-300",
+  "latex": "M=c_{M}\\Phi I_{a}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.94
+ },
+ "EQ-112": {
+  "cat": "electrical-stix-150",
+  "latex": "M=c_{M}\\Phi I_{a}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.13
+ },
+ "EQ-113": {
+  "cat": "electrical-dejavu-300",
+  "latex": "M=c_{M}\\Phi I_{a}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.65
+ },
+ "EQ-114": {
+  "cat": "electrical-dejavu-150",
+  "latex": "M=c_{M}\\Phi I_{a}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.49
+ },
+ "EQ-115": {
+  "cat": "electrical-cm-300",
+  "latex": "\\omega={\\frac{U\\,-\\,I_{a}R_{a}}{c_{e}\\Phi}}",
+  "confidence": 0.964,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 3.11
+ },
+ "EQ-116": {
+  "cat": "electrical-cm-150",
+  "latex": "\\omega={\\frac{U-I_{a}R_{a}}{c_{e}\\Phi}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.65
+ },
+ "EQ-117": {
+  "cat": "electrical-stix-300",
+  "latex": "\\omega={\\frac{U\\,-\\,I_{a}R_{a}}{c_{e}\\Phi}}",
+  "confidence": 0.983,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.43
+ },
+ "EQ-118": {
+  "cat": "electrical-stix-150",
+  "latex": "\\omega={\\frac{U-I_{a}R_{a}}{c_{e}\\Phi}}",
+  "confidence": 0.994,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.06
+ },
+ "EQ-119": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\omega={\\frac{U\\,-\\,I_{a}R_{a}}{c_{e}\\Phi}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.52
+ },
+ "EQ-120": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\omega=\\frac{U\\,-\\,I_{a}R_{a}}{c_{e}\\Phi}",
+  "confidence": 0.972,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.46
+ },
+ "EQ-121": {
+  "cat": "electrical-cm-300",
+  "latex": "I_{a}={\\frac{U\\:-\\:E}{R_{a}\\:+\\:R_{ad}}}",
+  "confidence": 0.992,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 3.76
+ },
+ "EQ-122": {
+  "cat": "electrical-cm-150",
+  "latex": "I_{a}=\\frac{U\\:-\\:E}{R_{a}\\:+\\:R_{ad}}",
+  "confidence": 0.988,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 4.15
+ },
+ "EQ-123": {
+  "cat": "electrical-stix-300",
+  "latex": "I_{a}={\\frac{U-E}{R_{a}+R_{ad}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 3.68
+ },
+ "EQ-124": {
+  "cat": "electrical-stix-150",
+  "latex": "I_{a}={\\frac{U-E}{R_{a}+R_{ad}}}",
+  "confidence": 0.994,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 4.61
+ },
+ "EQ-125": {
+  "cat": "electrical-dejavu-300",
+  "latex": "I_{a}={\\frac{U\\:-\\:E}{R_{a}\\:+\\:R_{ad}}}",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.6
+ },
+ "EQ-126": {
+  "cat": "electrical-dejavu-150",
+  "latex": "I_{a}={\\frac{U-E}{R_{a}\\,+\\,R_{ad}}}",
+  "confidence": 0.96,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.53
+ },
+ "EQ-127": {
+  "cat": "electrical-cm-300",
+  "latex": "n_{1}={\\frac{60f_{1}}{p}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.28
+ },
+ "EQ-128": {
+  "cat": "electrical-cm-150",
+  "latex": "n_{1}=\\frac{60f_{1}}{p}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.02
+ },
+ "EQ-129": {
+  "cat": "electrical-stix-300",
+  "latex": "n_{1}={\\frac{60f_{1}}{p}}",
+  "confidence": 0.993,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.27
+ },
+ "EQ-130": {
+  "cat": "electrical-stix-150",
+  "latex": "n_{1}={\\frac{60f_{1}}{p}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.61
+ },
+ "EQ-131": {
+  "cat": "electrical-dejavu-300",
+  "latex": "n_{1}=\\frac{60f_{1}}{p}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.94
+ },
+ "EQ-132": {
+  "cat": "electrical-dejavu-150",
+  "latex": "n_{1}=\\frac{60f_{1}}{p}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.77
+ },
+ "EQ-133": {
+  "cat": "electrical-cm-300",
+  "latex": "s={\\frac{n_{1}-n_{2}}{n_{1}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.83
+ },
+ "EQ-134": {
+  "cat": "electrical-cm-150",
+  "latex": "s={\\frac{n_{1}-n_{2}}{n_{1}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.49
+ },
+ "EQ-135": {
+  "cat": "electrical-stix-300",
+  "latex": "s=\\frac{n_{1}\\:-\\:n_{2}}{n_{1}}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.32
+ },
+ "EQ-136": {
+  "cat": "electrical-stix-150",
+  "latex": "s=\\frac{n_{1}\\,-\\,n_{2}}{n_{1}}",
+  "confidence": 0.987,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.21
+ },
+ "EQ-137": {
+  "cat": "electrical-dejavu-300",
+  "latex": "s=\\frac{n_{1}\\,-\\,n_{2}}{n_{1}}",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.05
+ },
+ "EQ-138": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\boldsymbol{s}=\\frac{n_{1}\\,\\boldsymbol{-}\\,n_{2}}{n_{1}}",
+  "confidence": 0.971,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.09
+ },
+ "EQ-139": {
+  "cat": "electrical-cm-300",
+  "latex": "k_{tr}={\\frac{w_{1}}{w_{2}}}={\\frac{E_{1}}{E_{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 3.66
+ },
+ "EQ-140": {
+  "cat": "electrical-cm-150",
+  "latex": "k_{tr}={\\frac{w_{1}}{w_{2}}}={\\frac{E_{1}}{E_{2}}}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.45
+ },
+ "EQ-141": {
+  "cat": "electrical-stix-300",
+  "latex": "k_{tr}={\\frac{w_{1}}{w_{2}}}={\\frac{E_{1}}{E_{2}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 7.08
+ },
+ "EQ-142": {
+  "cat": "electrical-stix-150",
+  "latex": "k_{tr}={\\frac{w_{1}}{w_{2}}}={\\frac{E_{1}}{E_{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.48
+ },
+ "EQ-143": {
+  "cat": "electrical-dejavu-300",
+  "latex": "K_{tr}={\\frac{w_{1}}{w_{2}}}={\\frac{E_{1}}{E_{2}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 3.69
+ },
+ "EQ-144": {
+  "cat": "electrical-dejavu-150",
+  "latex": "k_{tr}=\\frac{w_{1}}{w_{2}}=\\frac{E_{1}}{E_{2}}",
+  "confidence": 0.991,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.93
+ },
+ "EQ-145": {
+  "cat": "electrical-cm-300",
+  "latex": "P_{Cu}=3I_{1}^{2}R_{1}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.98
+ },
+ "EQ-146": {
+  "cat": "electrical-cm-150",
+  "latex": "P_{Cu}=3I_{1}^{2}R_{1}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.42
+ },
+ "EQ-147": {
+  "cat": "electrical-stix-300",
+  "latex": "P_{Cu}=3I_{1}^{2}R_{1}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.44
+ },
+ "EQ-148": {
+  "cat": "electrical-stix-150",
+  "latex": "P_{Cu}=3I_{1}^{2}R_{1}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.25
+ },
+ "EQ-149": {
+  "cat": "electrical-dejavu-300",
+  "latex": "P_{Cu}=3I_{1}^{2}R_{1}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.2
+ },
+ "EQ-150": {
+  "cat": "electrical-dejavu-150",
+  "latex": "P_{Cu}=3I_{1}^{2}R_{1}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.83
+ },
+ "EQ-151": {
+  "cat": "electrical-cm-300",
+  "latex": "W=\\int_{0}^{t}u(t)i(t)\\,dt",
+  "confidence": 0.975,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.72
+ },
+ "EQ-152": {
+  "cat": "electrical-cm-150",
+  "latex": "W=\\int_{0}^{t}u(t)i(t)\\,dt",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.25
+ },
+ "EQ-153": {
+  "cat": "electrical-stix-300",
+  "latex": "W=\\int_{0}^{t}u(t)i(t)\\,dt",
+  "confidence": 0.976,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.24
+ },
+ "EQ-154": {
+  "cat": "electrical-stix-150",
+  "latex": "W=\\int_{0}^{t}u(t)i(t)\\,dt",
+  "confidence": 0.97,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.76
+ },
+ "EQ-155": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\boldsymbol{W}=\\int_{0}^{t}u(t)\\boldsymbol{i}(t)\\,dt",
+  "confidence": 0.985,
+  "omml_ok": true,
+  "status": "flagged",
+  "engine": "pix2text-mfr",
+  "seconds": 1.9
+ },
+ "EQ-156": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\boldsymbol{W}=\\int_{\\boldsymbol{0}}^{\\boldsymbol{t}}\\boldsymbol{u}(t)\\boldsymbol{i}(t)\\,dt",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "flagged",
+  "engine": "pix2text-mfr",
+  "seconds": 2.03
+ },
+ "EQ-157": {
+  "cat": "electrical-cm-300",
+  "latex": "\\underline{{{Z}}}=R+jX",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.12
+ },
+ "EQ-158": {
+  "cat": "electrical-cm-150",
+  "latex": "\\underline{{Z}}=R+jX",
+  "confidence": 0.992,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.31
+ },
+ "EQ-159": {
+  "cat": "electrical-stix-300",
+  "latex": "\\underline{{Z}}=R+jX",
+  "confidence": 0.951,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.77
+ },
+ "EQ-160": {
+  "cat": "electrical-stix-150",
+  "latex": "\\underline{{Z}}=R+jX",
+  "confidence": 0.98,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.92
+ },
+ "EQ-161": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\underline{{Z}}=R+jX",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.83
+ },
+ "EQ-162": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\underline{{Z}}=R+jX",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.74
+ },
+ "EQ-163": {
+  "cat": "electrical-cm-300",
+  "latex": "f_{0}=\\frac{1}{2\\pi\\sqrt{LC}}",
+  "confidence": 0.992,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.86
+ },
+ "EQ-164": {
+  "cat": "electrical-cm-150",
+  "latex": "f_{0}={\\frac{1}{2\\pi{\\sqrt{LC}}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.6
+ },
+ "EQ-165": {
+  "cat": "electrical-stix-300",
+  "latex": "f_{0}={\\frac{1}{2\\pi{\\sqrt{LC}}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.94
+ },
+ "EQ-166": {
+  "cat": "electrical-stix-150",
+  "latex": "f_{0}={\\frac{1}{2\\pi{\\sqrt{LC}}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.36
+ },
+ "EQ-167": {
+  "cat": "electrical-dejavu-300",
+  "latex": "f_{0}={\\frac{1}{2\\pi\\sqrt{LC}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.93
+ },
+ "EQ-168": {
+  "cat": "electrical-dejavu-150",
+  "latex": "f_{0}={\\frac{1}{2\\pi{\\sqrt{LC}}}}",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.72
+ },
+ "EQ-169": {
+  "cat": "electrical-cm-300",
+  "latex": "Q={\\frac{1}{R}}{\\sqrt{\\frac{L}{C}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.38
+ },
+ "EQ-170": {
+  "cat": "electrical-cm-150",
+  "latex": "Q={\\frac{1}{R}}{\\sqrt{\\frac{L}{C}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.43
+ },
+ "EQ-171": {
+  "cat": "electrical-stix-300",
+  "latex": "Q={\\frac{1}{R}}{\\sqrt{\\frac{L}{C}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.46
+ },
+ "EQ-172": {
+  "cat": "electrical-stix-150",
+  "latex": "Q={\\frac{1}{R}}{\\sqrt{\\frac{L}{C}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.74
+ },
+ "EQ-173": {
+  "cat": "electrical-dejavu-300",
+  "latex": "Q={\\textstyle\\frac{1}{R}}\\sqrt{\\frac{L}{C}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.09
+ },
+ "EQ-174": {
+  "cat": "electrical-dejavu-150",
+  "latex": "Q={\\textstyle\\frac{1}{R}}\\sqrt{\\frac{L}{C}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.75
+ },
+ "EQ-175": {
+  "cat": "electrical-cm-300",
+  "latex": "\\Phi=\\frac{\\mu_{0}NIA}{l}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.91
+ },
+ "EQ-176": {
+  "cat": "electrical-cm-150",
+  "latex": "\\Phi={\\frac{\\mu_{0}NIA}{l}}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.5
+ },
+ "EQ-177": {
+  "cat": "electrical-stix-300",
+  "latex": "\\Phi={\\frac{\\mu_{0}NIA}{l}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.56
+ },
+ "EQ-178": {
+  "cat": "electrical-stix-150",
+  "latex": "\\mathbf{\\Phi}={\\frac{\\mu_{0}NIA}{l}}",
+  "confidence": 0.964,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.31
+ },
+ "EQ-179": {
+  "cat": "electrical-dejavu-300",
+  "latex": "\\Phi={\\frac{\\mu_{0}NIA}{I}}",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.79
+ },
+ "EQ-180": {
+  "cat": "electrical-dejavu-150",
+  "latex": "\\Phi={\\frac{\\mu_{0}NIA}{I}}",
+  "confidence": 0.978,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.64
+ },
+ "EQ-181": {
+  "cat": "physics-cm-300",
+  "latex": "F=ma",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.08
+ },
+ "EQ-182": {
+  "cat": "physics-cm-150",
+  "latex": "F=ma",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.53
+ },
+ "EQ-183": {
+  "cat": "physics-stix-300",
+  "latex": "F=ma",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.82
+ },
+ "EQ-184": {
+  "cat": "physics-stix-150",
+  "latex": "F=ma",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.68
+ },
+ "EQ-185": {
+  "cat": "physics-dejavu-300",
+  "latex": "F=ma",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.96
+ },
+ "EQ-186": {
+  "cat": "physics-dejavu-150",
+  "latex": "F=ma",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.75
+ },
+ "EQ-187": {
+  "cat": "physics-cm-300",
+  "latex": "E=mc^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.69
+ },
+ "EQ-188": {
+  "cat": "physics-cm-150",
+  "latex": "E=mc^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.58
+ },
+ "EQ-189": {
+  "cat": "physics-stix-300",
+  "latex": "E=mc^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.67
+ },
+ "EQ-190": {
+  "cat": "physics-stix-150",
+  "latex": "E=mc^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.53
+ },
+ "EQ-191": {
+  "cat": "physics-dejavu-300",
+  "latex": "E=mc^{2}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.72
+ },
+ "EQ-192": {
+  "cat": "physics-dejavu-150",
+  "latex": "E=mc^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.58
+ },
+ "EQ-193": {
+  "cat": "physics-cm-300",
+  "latex": "p=mv",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.06
+ },
+ "EQ-194": {
+  "cat": "physics-cm-150",
+  "latex": "p=mv",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.5
+ },
+ "EQ-195": {
+  "cat": "physics-stix-300",
+  "latex": "p=mv",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.53
+ },
+ "EQ-196": {
+  "cat": "physics-stix-150",
+  "latex": "p=mv",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.48
+ },
+ "EQ-197": {
+  "cat": "physics-dejavu-300",
+  "latex": "p=mv",
+  "confidence": 0.994,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.96
+ },
+ "EQ-198": {
+  "cat": "physics-dejavu-150",
+  "latex": "p=mv",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.88
+ },
+ "EQ-199": {
+  "cat": "physics-cm-300",
+  "latex": "E_{k}={\\frac{1}{2}}mv^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.03
+ },
+ "EQ-200": {
+  "cat": "physics-cm-150",
+  "latex": "E_{k}={\\frac{1}{2}}mv^{2}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.86
+ },
+ "EQ-201": {
+  "cat": "physics-stix-300",
+  "latex": "E_{k}=\\frac{1}{2}mv^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.39
+ },
+ "EQ-202": {
+  "cat": "physics-stix-150",
+  "latex": "E_{k}=\\frac{1}{2}mv^{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.84
+ },
+ "EQ-203": {
+  "cat": "physics-dejavu-300",
+  "latex": "E_{k}=\\frac{1}{2}mv^{2}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.11
+ },
+ "EQ-204": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\boldsymbol{E}_{k}=\\frac{1}{2}m\\boldsymbol{v}^{2}",
+  "confidence": 0.974,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.39
+ },
+ "EQ-205": {
+  "cat": "physics-cm-300",
+  "latex": "F=G{\\frac{m_{1}m_{2}}{r^{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.66
+ },
+ "EQ-206": {
+  "cat": "physics-cm-150",
+  "latex": "F=G{\\frac{m_{1}m_{2}}{r^{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.38
+ },
+ "EQ-207": {
+  "cat": "physics-stix-300",
+  "latex": "F=G{\\frac{m_{1}m_{2}}{r^{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.81
+ },
+ "EQ-208": {
+  "cat": "physics-stix-150",
+  "latex": "F=G{\\frac{m_{1}m_{2}}{r^{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.45
+ },
+ "EQ-209": {
+  "cat": "physics-dejavu-300",
+  "latex": "F=G{\\frac{m_{1}m_{2}}{r^{2}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.38
+ },
+ "EQ-210": {
+  "cat": "physics-dejavu-150",
+  "latex": "F=G\\frac{m_{1}m_{2}}{r^{2}}",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.01
+ },
+ "EQ-211": {
+  "cat": "physics-cm-300",
+  "latex": "F=k{\\frac{q_{1}q_{2}}{r^{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.87
+ },
+ "EQ-212": {
+  "cat": "physics-cm-150",
+  "latex": "F=k{\\frac{q_{1}q_{2}}{r^{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.01
+ },
+ "EQ-213": {
+  "cat": "physics-stix-300",
+  "latex": "F=k{\\frac{q_{1}q_{2}}{r^{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.14
+ },
+ "EQ-214": {
+  "cat": "physics-stix-150",
+  "latex": "F=k{\\frac{q_{1}q_{2}}{r^{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.1
+ },
+ "EQ-215": {
+  "cat": "physics-dejavu-300",
+  "latex": "F=k{\\frac{q_{1}q_{2}}{r^{2}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.1
+ },
+ "EQ-216": {
+  "cat": "physics-dejavu-150",
+  "latex": "F=k{\\frac{q_{1}q_{2}}{r^{2}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.96
+ },
+ "EQ-217": {
+  "cat": "physics-cm-300",
+  "latex": "\\vec{F}=q\\vec{E}+q\\vec{v}\\times\\vec{B}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.2
+ },
+ "EQ-218": {
+  "cat": "physics-cm-150",
+  "latex": "\\vec{F}=q\\vec{E}+q\\vec{v}\\times\\vec{B}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.04
+ },
+ "EQ-219": {
+  "cat": "physics-stix-300",
+  "latex": "\\vec{F}=q\\vec{E}+q\\vec{v}\\times\\vec{B}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.6
+ },
+ "EQ-220": {
+  "cat": "physics-stix-150",
+  "latex": "\\vec{F}=q\\vec{E}+q\\vec{v}\\times\\vec{B}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.13
+ },
+ "EQ-221": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\vec{F}=q\\vec{E}+q\\vec{v}\\times\\vec{B}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.0
+ },
+ "EQ-222": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\vec{F}=q\\vec{E}+q\\vec{v}\\times\\vec{B}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.93
+ },
+ "EQ-223": {
+  "cat": "physics-cm-300",
+  "latex": "\\nabla\\cdot\\mathbf{E}={\\frac{\\rho}{\\varepsilon_{0}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.44
+ },
+ "EQ-224": {
+  "cat": "physics-cm-150",
+  "latex": "\\nabla\\cdot\\mathbf{E}={\\frac{\\rho}{\\varepsilon_{0}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.94
+ },
+ "EQ-225": {
+  "cat": "physics-stix-300",
+  "latex": "\\nabla\\cdot\\mathbf{E}=\\frac{\\rho}{\\varepsilon_{0}}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.15
+ },
+ "EQ-226": {
+  "cat": "physics-stix-150",
+  "latex": "\\nabla\\cdot\\mathbf{E}=\\frac{\\rho}{\\varepsilon_{0}}",
+  "confidence": 0.988,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.37
+ },
+ "EQ-227": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\nabla\\cdot\\mathbf{E}={\\frac{\\rho}{\\varepsilon_{0}}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.38
+ },
+ "EQ-228": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\nabla\\cdot\\mathbf{E}={\\frac{\\rho}{\\varepsilon_{0}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.05
+ },
+ "EQ-229": {
+  "cat": "physics-cm-300",
+  "latex": "\\nabla\\times\\mathbf{E}=-\\frac{\\partial\\mathbf{B}}{\\partial t}",
+  "confidence": 0.986,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.53
+ },
+ "EQ-230": {
+  "cat": "physics-cm-150",
+  "latex": "\\nabla\\times\\mathbf{E}=-{\\frac{\\partial\\mathbf{B}}{\\partial t}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.11
+ },
+ "EQ-231": {
+  "cat": "physics-stix-300",
+  "latex": "\\nabla\\times\\mathbf{E}=-\\frac{\\partial\\mathbf{B}}{\\partial t}",
+  "confidence": 0.993,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.92
+ },
+ "EQ-232": {
+  "cat": "physics-stix-150",
+  "latex": "\\nabla\\times\\mathbf{E}=-\\frac{\\partial\\mathbf{B}}{\\partial t}",
+  "confidence": 0.977,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.47
+ },
+ "EQ-233": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\nabla\\times\\mathbf{E}=-{\\frac{\\partial\\mathbf{B}}{\\partial t}}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.53
+ },
+ "EQ-234": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\nabla\\times\\mathbf{E}=-{\\frac{\\partial\\mathbf{B}}{\\partial t}}",
+  "confidence": 0.98,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.28
+ },
+ "EQ-235": {
+  "cat": "physics-cm-300",
+  "latex": "\\oint_{C}\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_{0}I",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.26
+ },
+ "EQ-236": {
+  "cat": "physics-cm-150",
+  "latex": "\\oint_{C}\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_{0}I",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.19
+ },
+ "EQ-237": {
+  "cat": "physics-stix-300",
+  "latex": "\\oint_{C}\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_{0}I",
+  "confidence": 0.981,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.04
+ },
+ "EQ-238": {
+  "cat": "physics-stix-150",
+  "latex": "\\oint_{c}\\mathbf{B}\\cdot d\\mathbf{l}=\\mu_{0}I",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.9
+ },
+ "EQ-239": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\mathbf{\\oint}_{C}\\mathbf{B}\\cdot d\\mathbf{I}=\\mu_{0}\\boldsymbol{I}",
+  "confidence": 0.987,
+  "omml_ok": true,
+  "status": "flagged",
+  "engine": "pix2text-mfr",
+  "seconds": 2.22
+ },
+ "EQ-240": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\oint_{C}\\mathbf{B}\\cdot d\\mathbf{I}=\\mu_{0}I",
+  "confidence": 0.96,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.92
+ },
+ "EQ-241": {
+  "cat": "physics-cm-300",
+  "latex": "\\lambda={\\frac{h}{p}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.69
+ },
+ "EQ-242": {
+  "cat": "physics-cm-150",
+  "latex": "\\lambda={\\frac{h}{p}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.59
+ },
+ "EQ-243": {
+  "cat": "physics-stix-300",
+  "latex": "\\lambda={\\frac{h}{p}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.63
+ },
+ "EQ-244": {
+  "cat": "physics-stix-150",
+  "latex": "\\lambda={\\frac{h}{p}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.06
+ },
+ "EQ-245": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\lambda={\\frac{h}{p}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.71
+ },
+ "EQ-246": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\lambda=\\frac{h}{p}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.0
+ },
+ "EQ-247": {
+  "cat": "physics-cm-300",
+  "latex": "E=h\\nu",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "flagged",
+  "engine": "pix2text-mfr",
+  "seconds": 0.8
+ },
+ "EQ-248": {
+  "cat": "physics-cm-150",
+  "latex": "E=h\\nu",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.75
+ },
+ "EQ-249": {
+  "cat": "physics-stix-300",
+  "latex": "E=h\\nu\\,",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.99
+ },
+ "EQ-250": {
+  "cat": "physics-stix-150",
+  "latex": "E=h\\nu\\,",
+  "confidence": 0.989,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.78
+ },
+ "EQ-251": {
+  "cat": "physics-dejavu-300",
+  "latex": "E=h\\nu\\,",
+  "confidence": 0.986,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.86
+ },
+ "EQ-252": {
+  "cat": "physics-dejavu-150",
+  "latex": "E=h\\nu\\,",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.63
+ },
+ "EQ-253": {
+  "cat": "physics-cm-300",
+  "latex": "\\Delta x\\;\\Delta p\\geq\\frac{\\hbar}{2}",
+  "confidence": 0.987,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.52
+ },
+ "EQ-254": {
+  "cat": "physics-cm-150",
+  "latex": "\\Delta x\\;\\Delta p\\geq\\frac{\\hbar}{2}",
+  "confidence": 0.961,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.56
+ },
+ "EQ-255": {
+  "cat": "physics-stix-300",
+  "latex": "\\Delta x\\,\\Delta p\\geq{\\frac{\\hbar}{2}}",
+  "confidence": 0.988,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.44
+ },
+ "EQ-256": {
+  "cat": "physics-stix-150",
+  "latex": "\\Delta x\\,\\Delta p\\geq{\\frac{\\hbar}{2}}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.84
+ },
+ "EQ-257": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\Delta x\\,\\Delta p\\geq\\frac{\\hbar}{2}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.61
+ },
+ "EQ-258": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\Delta x\\,\\Delta p\\geq\\frac{\\hbar}{2}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.47
+ },
+ "EQ-259": {
+  "cat": "physics-cm-300",
+  "latex": "PV=nRT",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.66
+ },
+ "EQ-260": {
+  "cat": "physics-cm-150",
+  "latex": "PV=nRT",
+  "confidence": 0.992,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.55
+ },
+ "EQ-261": {
+  "cat": "physics-stix-300",
+  "latex": "PV=nRT",
+  "confidence": 0.992,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.58
+ },
+ "EQ-262": {
+  "cat": "physics-stix-150",
+  "latex": "PV=nRT",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.8
+ },
+ "EQ-263": {
+  "cat": "physics-dejavu-300",
+  "latex": "PV=nRT",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.93
+ },
+ "EQ-264": {
+  "cat": "physics-dejavu-150",
+  "latex": "PV=nRT",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.84
+ },
+ "EQ-265": {
+  "cat": "physics-cm-300",
+  "latex": "\\Delta U=Q-W",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.67
+ },
+ "EQ-266": {
+  "cat": "physics-cm-150",
+  "latex": "\\Delta U=Q-W",
+  "confidence": 0.993,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.59
+ },
+ "EQ-267": {
+  "cat": "physics-stix-300",
+  "latex": "\\Delta U=Q-W",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.89
+ },
+ "EQ-268": {
+  "cat": "physics-stix-150",
+  "latex": "\\Delta U=Q-W",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.56
+ },
+ "EQ-269": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\Delta U=Q-W",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.95
+ },
+ "EQ-270": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\Delta U=Q-W",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.79
+ },
+ "EQ-271": {
+  "cat": "physics-cm-300",
+  "latex": "\\eta=1-\\frac{T_{c}}{T_{h}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.77
+ },
+ "EQ-272": {
+  "cat": "physics-cm-150",
+  "latex": "\\eta=1\\,-\\,{\\frac{T_{c}}{T_{h}}}",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.9
+ },
+ "EQ-273": {
+  "cat": "physics-stix-300",
+  "latex": "\\eta=1-{\\frac{T_{c}}{T_{h}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.44
+ },
+ "EQ-274": {
+  "cat": "physics-stix-150",
+  "latex": "\\eta=1-{\\frac{T_{c}}{T_{h}}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.37
+ },
+ "EQ-275": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\eta=\\mathbf{1}-\\frac{T_{c}}{T_{h}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.9
+ },
+ "EQ-276": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\eta=\\mathbf{1}-\\frac{T_{c}}{T_{h}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.97
+ },
+ "EQ-277": {
+  "cat": "physics-cm-300",
+  "latex": "v=\\lambda f",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.87
+ },
+ "EQ-278": {
+  "cat": "physics-cm-150",
+  "latex": "v=\\lambda f",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.68
+ },
+ "EQ-279": {
+  "cat": "physics-stix-300",
+  "latex": "\\nu=\\lambda f",
+  "confidence": 0.991,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2tex",
+  "seconds": 0.53
+ },
+ "EQ-280": {
+  "cat": "physics-stix-150",
+  "latex": "v=\\lambda f",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.63
+ },
+ "EQ-281": {
+  "cat": "physics-dejavu-300",
+  "latex": "v=\\lambda f",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.82
+ },
+ "EQ-282": {
+  "cat": "physics-dejavu-150",
+  "latex": "v=\\lambda f",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.62
+ },
+ "EQ-283": {
+  "cat": "physics-cm-300",
+  "latex": "T=2\\pi\\sqrt{\\frac{l}{g}}",
+  "confidence": 0.982,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.11
+ },
+ "EQ-284": {
+  "cat": "physics-cm-150",
+  "latex": "T=2\\pi\\sqrt{\\frac{l}{g}}",
+  "confidence": 0.965,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.44
+ },
+ "EQ-285": {
+  "cat": "physics-stix-300",
+  "latex": "T=2\\pi\\sqrt{\\frac{l}{g}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.0
+ },
+ "EQ-286": {
+  "cat": "physics-stix-150",
+  "latex": "T=2\\pi\\sqrt{\\frac{l}{g}}",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.41
+ },
+ "EQ-287": {
+  "cat": "physics-dejavu-300",
+  "latex": "T=2\\pi\\sqrt{\\frac{l}{g}}",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.88
+ },
+ "EQ-288": {
+  "cat": "physics-dejavu-150",
+  "latex": "T=2\\pi\\sqrt{\\frac{l}{g}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.45
+ },
+ "EQ-289": {
+  "cat": "physics-cm-300",
+  "latex": "x(t)=A\\cos(\\omega t+\\varphi_{0})",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 3.99
+ },
+ "EQ-290": {
+  "cat": "physics-cm-150",
+  "latex": "x(t)=A\\cos(\\omega t+\\varphi_{0})",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.78
+ },
+ "EQ-291": {
+  "cat": "physics-stix-300",
+  "latex": "x(t)=A\\cos(\\omega t+\\varphi_{0})",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.26
+ },
+ "EQ-292": {
+  "cat": "physics-stix-150",
+  "latex": "x(t)=A\\cos(\\omega t+\\varphi_{0})",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.01
+ },
+ "EQ-293": {
+  "cat": "physics-dejavu-300",
+  "latex": "x(t)=A\\cos(\\omega t+\\varphi_{0})",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.13
+ },
+ "EQ-294": {
+  "cat": "physics-dejavu-150",
+  "latex": "x(t)=A\\cos(\\omega t+\\varphi_{0})",
+  "confidence": 0.969,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.04
+ },
+ "EQ-295": {
+  "cat": "physics-cm-300",
+  "latex": "\\omega={\\sqrt{\\frac{k}{m}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.13
+ },
+ "EQ-296": {
+  "cat": "physics-cm-150",
+  "latex": "\\omega={\\sqrt{\\frac{k}{m}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.0
+ },
+ "EQ-297": {
+  "cat": "physics-stix-300",
+  "latex": "\\omega={\\sqrt{\\frac{k}{m}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.13
+ },
+ "EQ-298": {
+  "cat": "physics-stix-150",
+  "latex": "\\omega={\\sqrt{\\frac{k}{m}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.86
+ },
+ "EQ-299": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\omega={\\sqrt{\\frac{k}{m}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.75
+ },
+ "EQ-300": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\omega=\\sqrt{\\frac{k}{m}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.55
+ },
+ "EQ-301": {
+  "cat": "physics-cm-300",
+  "latex": "\\frac{d^{\\,2}x}{dt^{\\,2}}+2\\beta\\frac{dx}{dt}+\\omega_{0}^{\\,2}x=0",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 4.35
+ },
+ "EQ-302": {
+  "cat": "physics-cm-150",
+  "latex": "{\\frac{d^{2}x}{dt^{2}}}+2\\beta{\\frac{dx}{dt}}+\\omega_{0}^{2}x=0",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 4.56
+ },
+ "EQ-303": {
+  "cat": "physics-stix-300",
+  "latex": "{\\frac{d^{2}x}{dt^{2}}}+2\\beta{\\frac{dx}{dt}}+\\omega_{0}^{2}x=0",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.7
+ },
+ "EQ-304": {
+  "cat": "physics-stix-150",
+  "latex": "{\\frac{d^{2}x}{dt^{2}}}+2\\beta{\\frac{dx}{dt}}+\\omega_{0}^{2}x=0",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.56
+ },
+ "EQ-305": {
+  "cat": "physics-dejavu-300",
+  "latex": "{\\frac{d^{2}x}{dt^{2}}}+2\\beta{\\frac{dx}{dt}}+\\omega_{0}^{2}x=0",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.83
+ },
+ "EQ-306": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\frac{d^{2}x}{dt^{2}}+2\\beta\\frac{dx}{dt}+\\omega_{0}^{2}x=\\boldsymbol{0}",
+  "confidence": 0.984,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.75
+ },
+ "EQ-307": {
+  "cat": "physics-cm-300",
+  "latex": "I=I_{0}e^{-\\mu x}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.82
+ },
+ "EQ-308": {
+  "cat": "physics-cm-150",
+  "latex": "I=I_{0}e^{-\\mu x}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.71
+ },
+ "EQ-309": {
+  "cat": "physics-stix-300",
+  "latex": "I=I_{0}e^{-\\mu x}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.33
+ },
+ "EQ-310": {
+  "cat": "physics-stix-150",
+  "latex": "I=I_{0}e^{-\\mu x}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.74
+ },
+ "EQ-311": {
+  "cat": "physics-dejavu-300",
+  "latex": "I=I_{0}e^{-\\mu x}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.02
+ },
+ "EQ-312": {
+  "cat": "physics-dejavu-150",
+  "latex": "I=I_{0}e^{-\\mu x}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.28
+ },
+ "EQ-313": {
+  "cat": "physics-cm-300",
+  "latex": "N=N_{0}e^{-\\lambda t}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.74
+ },
+ "EQ-314": {
+  "cat": "physics-cm-150",
+  "latex": "N=N_{0}e^{-\\lambda t}",
+  "confidence": 0.988,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.6
+ },
+ "EQ-315": {
+  "cat": "physics-stix-300",
+  "latex": "N=N_{0}e^{-\\lambda t}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.49
+ },
+ "EQ-316": {
+  "cat": "physics-stix-150",
+  "latex": "N=N_{0}e^{-\\lambda t}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.32
+ },
+ "EQ-317": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\boldsymbol{N}=\\boldsymbol{N}_{0}\\boldsymbol{e}^{-\\lambda t}",
+  "confidence": 0.986,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.66
+ },
+ "EQ-318": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\boldsymbol{N}=\\boldsymbol{N}_{0}\\boldsymbol{e}^{-\\lambda t}",
+  "confidence": 0.98,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.65
+ },
+ "EQ-319": {
+  "cat": "physics-cm-300",
+  "latex": "\\rho={\\frac{m}{V}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.97
+ },
+ "EQ-320": {
+  "cat": "physics-cm-150",
+  "latex": "\\rho={\\frac{m}{V}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.54
+ },
+ "EQ-321": {
+  "cat": "physics-stix-300",
+  "latex": "\\rho={\\frac{m}{V}}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.66
+ },
+ "EQ-322": {
+  "cat": "physics-stix-150",
+  "latex": "\\rho={\\frac{m}{V}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.63
+ },
+ "EQ-323": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\rho={\\frac{m}{V}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.93
+ },
+ "EQ-324": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\rho=\\frac{m}{v}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.55
+ },
+ "EQ-325": {
+  "cat": "physics-cm-300",
+  "latex": "P=\\frac{F}{A}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.6
+ },
+ "EQ-326": {
+  "cat": "physics-cm-150",
+  "latex": "P={\\frac{F}{A}}",
+  "confidence": 0.998,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.85
+ },
+ "EQ-327": {
+  "cat": "physics-stix-300",
+  "latex": "P={\\frac{F}{A}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.6
+ },
+ "EQ-328": {
+  "cat": "physics-stix-150",
+  "latex": "P={\\frac{F}{A}}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.57
+ },
+ "EQ-329": {
+  "cat": "physics-dejavu-300",
+  "latex": "P={\\frac{F}{A}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.09
+ },
+ "EQ-330": {
+  "cat": "physics-dejavu-150",
+  "latex": "P=\\frac{F}{A}",
+  "confidence": 0.973,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 0.75
+ },
+ "EQ-331": {
+  "cat": "physics-cm-300",
+  "latex": "\\gamma={\\frac{1}{\\sqrt{1-v^{2}/c^{2}}}}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 2.13
+ },
+ "EQ-332": {
+  "cat": "physics-cm-150",
+  "latex": "\\gamma={\\frac{1}{\\sqrt{1-v^{2}/c^{2}}}}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.97
+ },
+ "EQ-333": {
+  "cat": "physics-stix-300",
+  "latex": "\\gamma=\\frac{1}{\\sqrt{1\\,-\\,v^{2}/c^{2}}}",
+  "confidence": 0.972,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.29
+ },
+ "EQ-334": {
+  "cat": "physics-stix-150",
+  "latex": "\\gamma=\\frac{1}{\\sqrt{1-v^{2}/c^{2}}}",
+  "confidence": 0.985,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.48
+ },
+ "EQ-335": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\gamma={\\frac{1}{\\sqrt{1-v^{2}/c^{2}}}}",
+  "confidence": 0.966,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.64
+ },
+ "EQ-336": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\gamma=\\frac{1}{\\sqrt{1\\,-\\,v^{2}/c^{2}}}",
+  "confidence": 0.965,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 2.18
+ },
+ "EQ-337": {
+  "cat": "physics-cm-300",
+  "latex": "\\boldsymbol{\\Phi}_{B}=\\int\\mathbf{B}\\cdot d\\mathbf{A}",
+  "confidence": 0.957,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.58
+ },
+ "EQ-338": {
+  "cat": "physics-cm-150",
+  "latex": "\\Phi_{B}=\\intB\\cdot d\\mathbf{A}",
+  "confidence": 0.949,
+  "omml_ok": true,
+  "status": "flagged",
+  "engine": "pix2text-mfr",
+  "seconds": 1.62
+ },
+ "EQ-339": {
+  "cat": "physics-stix-300",
+  "latex": "\\boldsymbol{\\Phi}_{B}=\\int_{\\mathbf{B}}\\cdot d\\mathbf{A}",
+  "confidence": 0.975,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.7
+ },
+ "EQ-340": {
+  "cat": "physics-stix-150",
+  "latex": "\\Phi_{B}=\\beta8\\cdot d\\mathbf{A}",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2tex",
+  "seconds": 1.6
+ },
+ "EQ-341": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\Phi_{B}=\\textstyle\\int\\mathbf{B}\\cdot d\\mathbf{A}",
+  "confidence": 0.993,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.78
+ },
+ "EQ-342": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\Phi_{B}=\\textstyle\\int\\mathbf{B}\\cdot d\\mathbf{A}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.03
+ },
+ "EQ-343": {
+  "cat": "physics-cm-300",
+  "latex": "\\varepsilon=-\\frac{d\\Phi_{B}}{dt}",
+  "confidence": 0.996,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.67
+ },
+ "EQ-344": {
+  "cat": "physics-cm-150",
+  "latex": "\\varepsilon=-\\frac{d\\Phi_{B}}{dt}",
+  "confidence": 0.997,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.48
+ },
+ "EQ-345": {
+  "cat": "physics-stix-300",
+  "latex": "\\epsilon=-{\\frac{d\\Phi_{B}}{dt}}",
+  "confidence": 0.984,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.22
+ },
+ "EQ-346": {
+  "cat": "physics-stix-150",
+  "latex": "\\varepsilon=-{\\frac{d\\Phi_{B}}{dt}}",
+  "confidence": 0.99,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.83
+ },
+ "EQ-347": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\varepsilon=-\\frac{d\\Phi_{B}}{dt}",
+  "confidence": 0.995,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.53
+ },
+ "EQ-348": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\varepsilon=-\\frac{d\\Phi_{B}}{dt}",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.16
+ },
+ "EQ-349": {
+  "cat": "physics-cm-300",
+  "latex": "\\mathbf{J}=\\sigma\\mathbf{E}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.7
+ },
+ "EQ-350": {
+  "cat": "physics-cm-150",
+  "latex": "\\mathbf{J}=\\sigma\\mathbf{E}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.62
+ },
+ "EQ-351": {
+  "cat": "physics-stix-300",
+  "latex": "\\mathbf{J}=\\sigma\\mathbf{E}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.07
+ },
+ "EQ-352": {
+  "cat": "physics-stix-150",
+  "latex": "\\mathbf{J}=\\sigma\\mathbf{E}",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.25
+ },
+ "EQ-353": {
+  "cat": "physics-dejavu-300",
+  "latex": "\\mathbf{J}=\\sigma\\mathbf{E}",
+  "confidence": 0.991,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "pix2text-mfr",
+  "seconds": 1.22
+ },
+ "EQ-354": {
+  "cat": "physics-dejavu-150",
+  "latex": "\\mathbf{\\eta}=\\sigma\\mathbf{E}",
+  "confidence": 0.955,
+  "omml_ok": true,
+  "status": "flagged",
+  "engine": "pix2text-mfr",
+  "seconds": 1.16
+ },
+ "EQ-355": {
+  "cat": "physics-cm-300",
+  "latex": "{\\dot{q}}=-k\\nabla T",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.77
+ },
+ "EQ-356": {
+  "cat": "physics-cm-150",
+  "latex": "{\\dot{q}}=-k\\nabla T",
+  "confidence": 0.999,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.64
+ },
+ "EQ-357": {
+  "cat": "physics-stix-300",
+  "latex": "{\\dot{q}}=-k\\nabla T",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.22
+ },
+ "EQ-358": {
+  "cat": "physics-stix-150",
+  "latex": "{\\dot{q}}=-k\\nabla T",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 1.29
+ },
+ "EQ-359": {
+  "cat": "physics-dejavu-300",
+  "latex": "{\\dot{q}}=-k\\nabla T",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.7
+ },
+ "EQ-360": {
+  "cat": "physics-dejavu-150",
+  "latex": "{\\dot{q}}=-k\\nabla T",
+  "confidence": 1.0,
+  "omml_ok": true,
+  "status": "converted",
+  "engine": "both",
+  "seconds": 0.64
+ }
+}
