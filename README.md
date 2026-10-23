@@ -58,6 +58,23 @@ Both models are small, specialised AI models that only read equations. Everythin
 
 **Why the cross-check:** across both benchmarks the two models agreed on 300 images and were wrong on only 3 of them. When they disagree, pix2text-mfr is right far more often. "The same equation" is decided by comparing normalised MathML (`server/compare.py`), so harmless spelling differences such as `{\frac{a}{b}}` vs `\frac{a}{b}` count as agreement. Set `EQ_CROSSCHECK=0` for the faster v1.2 behaviour, where the second model only sees images pix2tex is unsure about.
 
+**Native Word objects** (`server/omml_fix.py`): Microsoft's MML2OMML.XSL gets several structures wrong. They are rewritten after conversion:
+
+| LaTeX | XSL alone gave | Now |
+|---|---|---|
+| `\vec`, `\overrightarrow`, `\dot`, `\ddot`, `\tilde`, `\widehat` | a limit above (`m:limUpp`) | accent (`m:acc`, U+20D7/0307/0308/0303/0302) |
+| `\bar`, `\overline` | a "―" accent | bar (`m:bar`) |
+| `\underbrace`, `\overbrace` | the brace as a raw character | group character (`m:groupChr`) |
+| `\binom` | small parentheses as text | stretching delimiter (`m:d`) around a no-bar fraction |
+| column vectors, `pmatrix`/`bmatrix`/`Bmatrix` | equation array (`m:eqArr`) or a fraction | matrix (`m:m`) in `m:d` |
+| `cases`, `\left(\frac{}{}\right)` | non-stretching `{` and `( )` | `m:d` |
+| `\lim_{x\to0}`, `\max_i` | subscript beside an italic "lim" | upright operator with the limit underneath |
+| `\operatorname{rank}` | italic `rankA` | upright `rank A` |
+
+**Standing rule:** anything that still can't be shown correctly (an accent left as a superscript, a raw brace character, an unconverted `\command`) is **refused**. The picture stays, and the review comment says why. Nothing broken is inserted.
+
+Run `.venv\Scripts\python tests\test_omml.py` for 53 structure tests covering every case above, `%` in every position, bold, script and blackboard letters, and the classes that must not regress.
+
 **Cleanup** (`core.tidy`) fixes model output that would render badly in Word:
 - tokenised spacing (`\mathbf { F }` loses its bold in conversion);
 - `\underset{}{\overset{}{\sum}}`, rewritten as a real n-ary sum;
@@ -96,6 +113,11 @@ Physics/electrical v1.3 readings by font: Computer Modern 116/120, STIX 109/120,
 ```
 
 Models also evaluated: PP-FormulaNet_plus (PaddleOCR). It has strong published scores, but it needs PaddlePaddle (over 1 GB, from a download server that was unreliable during testing) and extra dependencies, so it was not adopted.
+
+**Known limitations**
+- An OCR misread of `%` that is itself a valid expression can't be caught, for example `5\%` read as `5V_0`, which could genuinely mean 5·V₀. Only the meaningless misreads (`\lnot_0`, `\mathcal{Y}_0`) are corrected.
+- Parentheses around more than one object, such as `\left(1+\frac{1}{n}\right)`, don't stretch in Word.
+- `I`/`l`, `f`/`/` and `ε`/`ϵ` are hard to tell apart in some fonts.
 
 Works best on clean digital documents (for example AI-generated ones) with LaTeX-style equation images. Scans and photos aren't supported yet.
 

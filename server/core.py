@@ -123,10 +123,13 @@ BIG = r"sum|prod|int|oint|iint|iiint|bigcup|bigcap"
 TIDY = [
     (r"\\protect\b\s*", ""),
     (r"\\!", ""),                                   # negative space becomes an empty box in Word
+    (r"\\\\(?=[-+])", r"\\\\ "),                    # latex2mathml misreads a row break followed by a sign
     (r"\\(operatorname\*?|mathrm)\s*\{\s*((?:[A-Za-z]\s*)+)\}", lambda m: "\\" + m.group(1) + "{" + re.sub(r"\s+", "", m.group(2)) + "}"),
     # keep a space after the name: "\operatorname{sin}x" must become "\sin x", not "\sinx"
     (rf"\\(?:operatorname\*?|mathrm|mathsf|textsf|textrm|text)\{{\s*({FUNCS})\s*(?:\\,)?\s*\}}\s*(?=(.?))",
      lambda m: "\\" + m.group(1) + (" " if m.group(2).isalpha() else "")),
+    # other operator names (rank, adj, sgn, Tr, ...) are upright text with a thin space, not italic variables
+    (r"\\operatorname\*?\{([A-Za-z]+)\}\s*", r"\\mathrm{\1}\\,"),
     # limits written as \underset/\overset around \sum: Word needs a real n-ary operator
     (rf"\\underset\{{({G})\}}\{{\\overset\{{({G})\}}\{{?\\({BIG})\}}?\}}", r"\\\3_{\1}^{\2}"),
     (rf"\\overset\{{({G})\}}\{{\\underset\{{({G})\}}\{{?\\({BIG})\}}?\}}", r"\\\3_{\2}^{\1}"),
@@ -218,9 +221,18 @@ def fill_empty_nary(root):
     return root
 
 
+class Unexpressible(ValueError):
+    """The equation cannot be shown correctly in Word; the image must stay and be flagged."""
+
+
 def latex_to_omml(latex):
+    import omml_fix
     mml = etree.fromstring(latex_to_mathml(latex).encode())
-    return etree.tostring(fill_empty_nary(xslt()(mml).getroot()), encoding="unicode")
+    root = omml_fix.fix(fill_empty_nary(xslt()(mml).getroot()))
+    issues = omml_fix.problems(root)
+    if issues:
+        raise Unexpressible("; ".join(dict.fromkeys(issues)))
+    return etree.tostring(root, encoding="unicode")
 
 
 def log(entry):
@@ -245,10 +257,11 @@ def process(image_bytes, verify=True, source=""):
     rgb = img.convert("RGB")
     raw1, conf = best_reading(rgb)
     latex, conf = tidy(raw1), round(conf, 3)
-    omml = try_omml(latex)
+    errors = []
+    omml = try_omml(latex, errors)
     engine = "pix2tex"
     if USE_SECOND and CROSSCHECK:
-        status, reason, latex, conf, omml, engine = cross_check(rgb, latex, conf, omml, entry)
+        status, reason, latex, conf, omml, engine = cross_check(rgb, latex, conf, omml, entry, errors)
     elif omml and conf >= THRESHOLD:
         status, reason = "converted", f"pix2tex confidence {conf} >= {THRESHOLD}"
     elif USE_SECOND:
@@ -277,15 +290,18 @@ def process(image_bytes, verify=True, source=""):
     return r
 
 
-def cross_check(rgb, latex1, conf1, omml1, entry):
+def cross_check(rgb, latex1, conf1, omml1, entry, errors):
     """Both models read every image. When they agree the reading has been right every time on the
     benchmarks; when they disagree, pix2text-mfr is right far more often, so it wins if confident."""
     import second
     from compare import canon
     raw2, conf2 = second.read(rgb)
     latex2, conf2 = tidy(raw2), round(conf2, 3)
-    omml2 = "" if JUNK.search(raw2) else try_omml(latex2)
+    omml2 = "" if JUNK.search(raw2) else try_omml(latex2, errors)
     entry["candidates"] = {"pix2tex": [latex1, conf1], "pix2text-mfr": [latex2, conf2]}
+    if not omml1 and not omml2:
+        return "flagged", "cannot be shown correctly as a Word equation: " + "; ".join(dict.fromkeys(errors) or ["no usable reading"]), \
+            latex2, max(conf1, conf2), "", "pix2text-mfr"
     if omml1 and omml2 and canon(latex1) == canon(latex2):
         return "converted", "both models agree", latex1, max(conf1, conf2), omml1, "both"
     if omml2 and conf2 >= SECOND_THRESHOLD:
@@ -296,8 +312,10 @@ def cross_check(rgb, latex1, conf1, omml1, entry):
         latex2 if omml2 else latex1, max(conf1, conf2), omml2 or omml1, "pix2text-mfr" if omml2 else "pix2tex"
 
 
-def try_omml(latex):
+def try_omml(latex, errors=None):
     try:
         return latex_to_omml(latex)
-    except Exception:
+    except Exception as e:
+        if errors is not None:
+            errors.append(str(e) if isinstance(e, Unexpressible) else f"LaTeX not convertible ({type(e).__name__})")
         return ""
