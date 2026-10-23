@@ -126,6 +126,14 @@ case(r"(\partial/ -m)\psi=0", lambda r: "phant" in tags(r), "slashed partial")
 case(r"v=s/t", lambda r: "phant" not in tags(r) and "/" in text(r), "real division a/b is untouched")
 case(r"x^{\ 2}+\partial_{5}{}^{2}", lambda r: " " not in text(r) and "sSubSup" in tags(r), "no stray space or empty base in scripts")
 
+# a space-only run makes Word's InsertXML insert a row of tabs (equation breaks across lines)
+def spaces_safe(r):
+    edged = [t for t in r.iter(M + "t") if t.text and (t.text[0] in "  " or t.text[-1] in "  ")]
+    return bool(edged) and all(t.text[0] != " " and t.text[-1] != " " and
+                               t.get("{http://www.w3.org/XML/1998/namespace}space") == "preserve" for t in edged)
+for lx in (r"=92.3\ \mathrm{N\cdot m}", r"=1.84~\mathrm{s}", r"=1.85\text{ kW}"):
+    case(lx, spaces_safe, "space before a unit is a preserved non-breaking space")
+
 # standing rule: what cannot be expressed is refused, never emitted
 def refused(latex):
     try:

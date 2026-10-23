@@ -135,11 +135,27 @@ def fix_slash(root):
                 t.text = t.text.replace("⧸", "/")
 
 
+XML_SPACE = "{http://www.w3.org/XML/1998/namespace}space"
+
+
+def fix_spaces(root):
+    """A run holding only a space (from "\\ " or "~" before a unit) is turned into a row of tabs by
+    Word's InsertXML, which then breaks the equation across lines. Use a preserved non-breaking space."""
+    for t in root.iter(M + "t"):
+        s = t.text or ""
+        if s and (s[0].isspace() or s[-1].isspace()):  # e.g. " " alone, or " kW" from \text{ kW}
+            core = s.strip()
+            lead, trail = len(s) - len(s.lstrip()), len(s) - len(s.rstrip())
+            t.text = " " * lead + core + " " * (trail if core else 0)
+            t.set(XML_SPACE, "preserve")
+
+
 def fix(root):
     fix_accents(root)
     fix_delimited(root)
     fix_limits(root)
     fix_slash(root)
+    fix_spaces(root)
     return root
 
 

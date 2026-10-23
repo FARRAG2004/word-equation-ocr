@@ -126,7 +126,9 @@ namespace EquationAddIn
                         if (item.Status == "converted")
                         {
                             var range = item.Shape.Range;
+                            IncludeLayoutTabs(range);
                             range.InsertXML(FlatOpc(item.Omml));
+                            RemoveTabs(range);
                             item.Placed = range;
                             item.Shape = null;
                             converted++;
@@ -151,6 +153,31 @@ namespace EquationAddIn
                 app.ScreenUpdating = true;
             }
             return (converted, flagged, skipped);
+        }
+
+        /// <summary>
+        /// Documents often position an equation picture with tabs ("\t\t[picture]\t\t"). Word pulls those
+        /// tabs into the new equation, which then breaks across lines. If the paragraph holds nothing but
+        /// the picture and tabs/spaces, replace them together; a picture inside a sentence keeps its spaces.
+        /// </summary>
+        static void IncludeLayoutTabs(Word.Range range)
+        {
+            var paragraph = range.Paragraphs[1].Range.Text ?? "";
+            if (paragraph.Replace(range.Text ?? "", "").Trim(' ', '\t', '\r', '\a', ' ').Length > 0) return;
+            range.MoveStartWhile(" \t ", Word.WdConstants.wdBackward);
+            range.MoveEndWhile(" \t ", Word.WdConstants.wdForward);
+        }
+
+        /// <summary>A tab inside an equation is never intended: Word breaks the line at it.</summary>
+        static void RemoveTabs(Word.Range range)
+        {
+            foreach (Word.OMath math in range.OMaths)
+            {
+                var find = math.Range.Find;
+                find.ClearFormatting();
+                find.Replacement.ClearFormatting();
+                find.Execute(FindText: "^t", ReplaceWith: "", Wrap: Word.WdFindWrap.wdFindStop, Replace: Word.WdReplace.wdReplaceAll);
+            }
         }
 
         public static void Shutdown()
