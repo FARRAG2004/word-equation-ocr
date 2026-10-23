@@ -72,9 +72,11 @@ namespace EquationAddIn
         {
             EnsureServer();
             var doc = Application.ActiveDocument;
-            var shapes = doc.InlineShapes.Cast<Word.InlineShape>()
-                .Where(s => s.Type == Word.WdInlineShapeType.wdInlineShapePicture
-                         || s.Type == Word.WdInlineShapeType.wdInlineShapeLinkedPicture)
+            var all = doc.InlineShapes.Cast<Word.InlineShape>().ToList();
+            var images = DocumentImages(doc.WordOpenXML, all.Count);
+            var shapes = Enumerable.Range(0, all.Count)
+                .Where(k => all[k].Type == Word.WdInlineShapeType.wdInlineShapePicture
+                         || all[k].Type == Word.WdInlineShapeType.wdInlineShapeLinkedPicture)
                 .ToList();
             int converted = 0, skipped = 0, flagged = 0;
             Application.ScreenUpdating = false;
@@ -84,8 +86,8 @@ namespace EquationAddIn
                 for (int i = shapes.Count - 1; i >= 0; i--)
                 {
                     Application.StatusBar = $"Equation OCR: image {shapes.Count - i} of {shapes.Count}";
-                    var range = shapes[i].Range;
-                    var image = ImageBytes(range.WordOpenXML);
+                    var range = all[shapes[i]].Range;
+                    var image = images?[shapes[i]] ?? ImageBytes(range.WordOpenXML);
                     if (image == null) { skipped++; continue; }
                     var r = Ocr(image);
                     var status = (string)r["status"];
@@ -107,8 +109,38 @@ namespace EquationAddIn
                 Application.ScreenUpdating = true;
                 Application.StatusBar = "";
             }
-            MessageBox.Show($"Converted: {converted}\nFlagged for review (commented): {flagged}\nSkipped (not equations): {skipped}",
+            MessageBox.Show($"Converted: {converted}\nFlagged for review (commented): {flagged}\nSkipped (no readable image): {skipped}",
                 "Equation OCR");
+        }
+
+        static readonly XNamespace W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+        static readonly XNamespace WP = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing";
+        static readonly XNamespace A = "http://schemas.openxmlformats.org/drawingml/2006/main";
+        static readonly XNamespace R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+        static readonly XNamespace Rel = "http://schemas.openxmlformats.org/package/2006/relationships";
+
+        // Word loads picture data lazily: a single InlineShape's Range.WordOpenXML often has no image
+        // part for pictures not yet displayed, but the whole-document export always has every image.
+        // Returns one entry per InlineShape (document order), or null if the order can't be matched.
+        static byte[][] DocumentImages(string flatOpc, int inlineShapeCount)
+        {
+            var parts = XDocument.Parse(flatOpc).Root.Elements(Pkg + "part")
+                .ToDictionary(p => (string)p.Attribute(Pkg + "name"));
+            if (!parts.TryGetValue("/word/document.xml", out var main) ||
+                !parts.TryGetValue("/word/_rels/document.xml.rels", out var rels)) return null;
+            var targets = rels.Descendants(Rel + "Relationship")
+                .ToDictionary(r => (string)r.Attribute("Id"), r => "/word/" + ((string)r.Attribute("Target")).TrimStart('/').Replace("word/", ""));
+            var inlines = main.Descendants(WP + "inline")
+                .Where(e => !e.Ancestors(W + "txbxContent").Any())  // text-box content is another story
+                .ToList();
+            if (inlines.Count != inlineShapeCount) return null;
+            return inlines.Select(e =>
+            {
+                var id = (string)e.Descendants(A + "blip").FirstOrDefault()?.Attribute(R + "embed");
+                if (id == null || !targets.TryGetValue(id, out var name) || !parts.TryGetValue(name, out var part)) return null;
+                var data = part.Element(Pkg + "binaryData")?.Value;
+                return data == null ? null : Convert.FromBase64String(data);
+            }).ToArray();
         }
 
         static byte[] ImageBytes(string flatOpc)
