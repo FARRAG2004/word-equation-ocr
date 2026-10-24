@@ -91,19 +91,19 @@ The engine line-up, trust order and thresholds live in `server/config.json`. Set
 
 **Standing rule:** anything that still can't be shown correctly (an accent left as a superscript, a raw brace character, an unconverted `\command`) is **refused**. The picture stays, and the review comment says why. Nothing broken is inserted.
 
-Run `.venv\Scripts\python tests\test_omml.py` for 53 structure tests covering every case above, `%` in every position, bold, script and blackboard letters, and the classes that must not regress.
+`tests/test_omml.py` holds 68 structure cases covering every case above, `%` in every position, bold, script and blackboard letters, and the classes that must not regress (run them with `tests\run_all.py`, below).
 
-**Cleanup** (`core.tidy`) fixes model output that would render badly in Word:
+**Cleanup** (`server/latex_cleanup.py`: 31 named rules in 5 groups, each with an example it is tested on) fixes model output that would render badly in Word:
 - tokenised spacing (`\mathbf { F }` loses its bold in conversion);
 - `\underset{}{\overset{}{\sum}}`, rewritten as a real n-ary sum;
 - one-cell matrices, empty sub/superscripts, and `\operatorname{sin}`, rewritten as `\sin`;
-- the meaningless sequences both models produce for `%`.
+- the meaningless sequences the models produce for `%`, and the `A/` they write for a Feynman slash.
 
 - **On demand, no idle cost:** nothing runs while Word is just open. Converting starts the local server (FastAPI on `127.0.0.1:8765`) and loads the models. The server shuts itself down after 2 idle minutes (`EQ_IDLE_EXIT`, in seconds) and frees all RAM and VRAM; it is also stopped when Word closes.
-- **Both models at once:** pix2text-mfr (CPU) runs in a background thread while pix2tex uses the GPU. When the two agree on pix2tex's first reading, pix2tex's extra scale readings are skipped. Result: ~2.4 s per image on an idle RTX 3060 laptop, 21% faster than v1.4. Because the server runs at below-normal priority, it slows down when other programs are busy (about 5 s per image with the processor already 60% loaded), instead of slowing them down.
+- **All models at once:** pix2text-mfr (CPU), pix2tex and TexTeller (GPU) read each image in parallel. When the others agree with pix2tex's first reading, its extra scale readings are skipped. Result: ~1.2–1.8 s per image on an idle RTX 3060 laptop. Because the server runs at below-normal priority, it slows down when other programs are busy (about 5 s per image with the processor already 60% loaded), instead of slowing them down.
 - **Confidence** is each model's own token confidence (the geometric mean of per-token probabilities); pix2tex also tries 3 scales and keeps its most confident reading. Pictures are never compared, because the rendered font never matches the source image.
-  - On non-equation pictures (photo, diagram, a line of text) pix2text-mfr scored 0.30–0.94, below its 0.95 threshold (`EQ_SECOND_THRESHOLD`). So those are flagged rather than turned into "equations".
-  - Set `EQ_SECOND=0` to use pix2tex only.
+  - On non-equation pictures (photo, diagram, a line of text) the models disagree and score below their thresholds (pix2text-mfr 0.30–0.94 against 0.95). So those are flagged rather than turned into "equations".
+  - Thresholds are per engine in `server/config.json`; `EQ_ENGINES=pix2tex` (for example) runs a single engine.
   - Flagged pictures stay in place, with a Word **comment** giving the reason and the guessed LaTeX.
   - Every image is OCR'd; there is no "is this an equation?" pre-filter. Each decision is logged to `ocr_log.jsonl` so a filter can later be built from real data.
 - **Command-line version** (no Word needed):
@@ -128,8 +128,8 @@ The remaining errors are mostly inherent to the fonts: `I` vs `l` in sans-serif,
 
 ```powershell
 .venv\Scripts\python bench.py samples\physics_bench.docx samples\ground_truth_physics.json --rerun
-.venv\Scripts\python samples\collect_scores.py BENCH.docx TRUTH.json xp.json      # both readings per image
-.venv\Scripts\python samples\analyse_scores.py xp.json=TRUTH.json                # compare decision rules
+.venv\Scripts\python samples\collect_scores.py BENCH.docx TRUTH.json xp.json      # every engine's reading per image
+.venv\Scripts\python samples\analyse_engines.py                                  # compare engine line-ups, no OCR run
 ```
 
 Models also evaluated: PP-FormulaNet_plus (PaddleOCR). It has strong published scores, but it needs PaddlePaddle (over 1 GB, from a download server that was unreliable during testing) and extra dependencies, so it was not adopted.
@@ -164,8 +164,9 @@ server/
   engines/           one module per OCR model: NAME, load(), read(rgb) -> (latex, confidence)
     pix2tex.py         GPU, three scales, early stop when another engine agrees
     pix2text_mfr.py    CPU, ONNX Runtime, own greedy decoder
+    texteller.py       GPU, transformers VisionEncoderDecoder
   core.py            orchestrator: runs every engine in parallel, cleans, converts, decides, logs
-  latex_cleanup.py   rules fixing model quirks and constructs Word renders badly
+  latex_cleanup.py   named rule groups fixing model quirks and constructs Word renders badly
   omml.py            LaTeX -> MathML -> OMML; refuses (Unexpressible) what it can't show correctly
   omml_fix.py        repairs MML2OMML's structures; checks every LaTeX construct survived
   decide.py          agreement / majority / trust-order rules
@@ -176,14 +177,16 @@ tests/               strict test suite (below), stored benchmark readings, basel
 samples/             benchmark generators and research scripts
 ```
 
-**Adding an OCR model:** put a module in `server/engines/` with the same interface, and add its name to `config.json`. Nothing else changes: `core.py` runs it in parallel with the others, and `decide.py` includes it in the majority vote. Measure it first with `samples/collect_scores.py` and `samples/analyse_scores.py`.
+**Adding an OCR model:** put a module in `server/engines/` with the same interface, and add its name to `config.json`. Nothing else changes: `core.py` runs it in parallel with the others, and `decide.py` includes it in the majority vote. Measure it first with `samples/collect_scores.py` and `samples/analyse_engines.py`.
 
-**Adding a cleanup rule or a Word-structure fix:** add a test case to `tests/test_omml.py` first, then the rule to `latex_cleanup.py` or `omml_fix.py`.
+**Adding a cleanup rule:** add a `Rule(name, pattern, replacement, example, expected)` to the right group in `latex_cleanup.py`. The tests check that it fixes its example and that the benchmark scores don't drop.
+
+**Adding a Word-structure fix:** add a test case to `tests/test_omml.py` first, then the fix to `omml_fix.py`.
 
 ## Tests
 
 ```powershell
-.venv\Scripts\python tests\run_all.py           # ~5 s: structure, stability, refusals, decision replay
+.venv\Scripts\python tests\run_all.py           # ~5 s: rules, structure, stability, refusals, decision replay
 .venv\Scripts\python tests\run_all.py --full    # + real OCR on both benchmarks (~15 min, GPU)
 .venv\Scripts\python tests\run_all.py --word    # + every structure case rendered by Word
 ```

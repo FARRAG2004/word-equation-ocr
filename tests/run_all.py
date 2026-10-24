@@ -6,12 +6,14 @@
     python tests/run_all.py --update-baseline   accept current scores as the new minimum
 
 Stages
+ 0 rules       every cleanup rule turns its own example into its expected text
  1 structure   tests/test_omml.py: each LaTeX construct reaches Word as the right OMML object
  2 stability   tidy() is idempotent on every stored reading (a second pass changes nothing)
  3 refusals    no correct benchmark reading is refused by the output check
  4 decisions   stored readings replayed through decide(): correct >= baseline, wrong <= baseline
 """
 import json
+import re
 import subprocess
 import sys
 import time
@@ -22,6 +24,7 @@ ROOT = TESTS.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "server")); sys.path.insert(0, str(TESTS))
 
 import core  # noqa: E402
+import latex_cleanup  # noqa: E402
 import test_omml  # noqa: E402
 from compare import canon  # noqa: E402
 from decide import Reading, decide  # noqa: E402
@@ -36,6 +39,20 @@ def check(ok, message):
     print(("  ok    " if ok else "  FAIL  ") + message)
     if not ok:
         failures.append(message)
+
+
+def stage_rules():
+    print("0 rules")
+    bad = 0
+    for group, rules in latex_cleanup.GROUPS.items():
+        for r in rules:
+            got = re.sub(r.pattern, r.repl, r.example)
+            if got != r.expected:
+                bad += 1
+                print(f"        {group} / {r.name}: {r.example!r} -> {got!r}, expected {r.expected!r}")
+    names = [r.name for r in latex_cleanup.RULES]
+    check(len(set(names)) == len(names), "rule names are unique")
+    check(bad == 0, f"{len(names) - bad}/{len(names)} cleanup rules fix their example")
 
 
 def stage_structure():
@@ -163,7 +180,6 @@ def stage_full(update):
         out = subprocess.run([sys.executable, str(ROOT / "bench.py"), str(doc), str(DATA / f"truth_{name}.json"), "--rerun"],
                              capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
         line = next((l for l in out.splitlines() if l.startswith("Pipeline as shipped")), "")
-        import re
         m = re.search(r"converted (\d+), flagged (\d+), skipped (\d+); wrong among converted (\d+)", line)
         if not m:
             check(False, f"{name}: bench.py produced no result")
@@ -204,6 +220,7 @@ def stage_word():
 if __name__ == "__main__":
     args = set(sys.argv[1:])
     update = "--update-baseline" in args
+    stage_rules()
     stage_structure()
     stage_stability()
     stage_refusals()

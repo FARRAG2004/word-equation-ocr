@@ -1,4 +1,4 @@
-"""Score OCR against a ground truth and sweep the confidence threshold.
+"""Score the pipeline against a ground truth (per-engine thresholds: samples/analyse_engines.py).
 
 python bench.py sample_100.docx ground_truth.json [--rerun]
 
@@ -109,15 +109,6 @@ def main():
             print(f"  by {eng:<12} {len(e):>3} converted, {sum(not r['correct'] for r in e)} wrong")
         if any("seconds" in r for r in rows):
             print(f"  OCR time: {sum(r.get('seconds', 0) for r in rows):.0f}s total")
-
-    print("\nthreshold  converted  wrong-converted  precision  correct-but-flagged")
-    for t in (0.90, 0.93, 0.95, 0.96, 0.97, 0.975, 0.98, 0.985, 0.99, 0.995):
-        conv = [r for r in rows if r["omml_ok"] and r["confidence"] >= t]
-        wrong = sum(not r["correct"] for r in conv)
-        missed = sum(r["correct"] and r["confidence"] < t for r in rows)
-        prec = (len(conv) - wrong) / len(conv) if conv else 0
-        mark = "  <- current" if abs(t - core.THRESHOLD) < 1e-9 else ""
-        print(f"  {t:<8} {len(conv):>9} {wrong:>16} {prec:>10.1%} {missed:>20}{mark}")
 
     print("\nWrong readings (id, confidence, OCR vs truth):")
     for r in sorted(rows, key=lambda r: -r["confidence"]):

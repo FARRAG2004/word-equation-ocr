@@ -1,4 +1,5 @@
-"""Collect both models' readings and confidences for every benchmark image (for tuning decisions).
+"""Collect every configured engine's reading and confidence for every benchmark image (for tuning decisions).
+The output has the same format as tests/data/readings_*.json, so samples/analyse_engines.py and the tests can use it.
 
 python samples/collect_scores.py BENCH.docx TRUTH.json OUT.json      (resumes if OUT.json exists)
 """
@@ -36,13 +37,6 @@ for (eq_id, cat), blob in images_with_ids(docx):
         lx = core.tidy(raw)
         row["readings"][name] = {"raw": raw, "latex": lx, "conf": conf, "seconds": round(time.time() - t1, 2),
                                  "junk": bool(core.JUNK.search(raw)), "ok": bool(core.try_omml(lx)) and canon(lx) == gt}
-    # legacy fields (pix2tex = A, pix2text_mfr = B) used by older analyses
-    if {"pix2tex", "pix2text_mfr"} <= set(row["readings"]):
-        a, b = row["readings"]["pix2tex"], row["readings"]["pix2text_mfr"]
-        row.update(A=a["latex"], B=b["latex"], c1=a["conf"], c2=b["conf"], okA=a["ok"], okB=b["ok"],
-                   agree=canon(a["latex"]) == canon(b["latex"]), junkB=b["junk"],
-                   omA=bool(core.try_omml(a["latex"])), omB=bool(core.try_omml(b["latex"])),
-                   t_pix2tex=a["seconds"], t_total=a["seconds"] + b["seconds"])
     data[eq_id] = row
     print(eq_id, cat, " ".join(f"{n}={'ok' if r['ok'] else '-'}" for n, r in row["readings"].items()), flush=True)
     if len(data) % 10 == 0:

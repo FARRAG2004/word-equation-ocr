@@ -1,7 +1,7 @@
 """Compare engine line-ups with the real decision rule, from stored readings (no OCR run).
 
 python samples/analyse_engines.py [ENGINE=readings.json ...]
-  stored readings for pix2tex and pix2text_mfr come from tests/data; extra engines are given as
+  stored readings of every engine come from tests/data (readings_<set>[_<engine>].json); new engines are given as
   NAME=file.json with {id: {latex, confidence}} per benchmark, e.g. texteller=tt_s100.json,tt_phys.json
 """
 import itertools
@@ -23,7 +23,7 @@ for arg in sys.argv[1:]:
     for set_name, f in zip(SETS, files.split(",")):
         extra[name][set_name] = {k: (v["latex"], v["confidence"]) for k, v in json.load(open(f, encoding="utf-8")).items()}
 
-THRESH = {"pix2tex": 0.99, "pix2text_mfr": 0.95, "texteller": 0.95}
+THRESH = core.THRESHOLDS  # from server/config.json
 cache = {}
 
 
@@ -51,7 +51,7 @@ def score(order, set_name, thresholds):
 
 
 engines_all = ["pix2text_mfr", "pix2tex"] + list(extra)
-lineups = [("pix2text_mfr", "pix2tex")]
+lineups = [tuple(THRESH), ("pix2text_mfr", "pix2tex")]  # as shipped, then the two original engines
 for n in extra:
     lineups += [(n,)] + [p for p in itertools.permutations(engines_all, 3) if n in p][:6]
 print(f"{'line-up (trust order)':<44}" + "".join(f"{s:>34}" for s in SETS))
