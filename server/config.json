@@ -1,0 +1,10 @@
+{
+  "_comment": "Engines are tried in this order of trust when they disagree. Add a model: put a module in engines/ and its name here.",
+  "engines": [
+    {"name": "pix2text_mfr", "threshold": 0.95},
+    {"name": "pix2tex", "threshold": 0.99},
+    {"name": "texteller", "threshold": 0.95}
+  ],
+  "cross_check": true,
+  "idle_exit_seconds": 120
+}

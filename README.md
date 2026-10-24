@@ -33,7 +33,7 @@ The **Equation OCR** side panel shows:
 
 **Word stays responsive.** Pictures are read in the background, and the document is changed only at the end, all at once, so **one Ctrl+Z undoes the whole conversion**.
 
-**It stays out of the way.** The AI models start only when you convert, and run at below-normal priority (your other programs come first). They use about 1 GB of RAM while working and shut down 2 minutes after the last conversion. The clipboard is never touched: pix2tex's habit of copying each result to the clipboard is switched off.
+**It stays out of the way.** The AI models start only when you convert, and run at below-normal priority (your other programs come first). They take about 20 seconds to start, use about 1.7 GB of RAM while working, and shut down 2 minutes after the last conversion. The clipboard is never touched: pix2tex's habit of copying each result to the clipboard is switched off.
 
 The installer downloads everything it needs by itself, per-user and without admin rights. It needs an internet connection **only during install**:
 
@@ -42,7 +42,7 @@ The installer downloads everything it needs by itself, per-user and without admi
 | Python 3.12 (python.org) | ~25 MB | Skipped if Python 3.12 is already installed |
 | PyTorch | ~2.5 GB with an NVIDIA GPU (CUDA), ~200 MB without | The CPU build is slower but works |
 | pix2tex and other libraries | ~300 MB | |
-| The two OCR models (pix2tex + pix2text-mfr) | ~230 MB | |
+| The three OCR models (pix2tex, pix2text-mfr, TexTeller) | ~1.4 GB | Downloaded once; kept by updates |
 
 Everything goes to `%LOCALAPPDATA%\EquationAddIn`. To remove it all, run `uninstall.bat` from that folder.
 
@@ -51,25 +51,30 @@ Everything goes to `%LOCALAPPDATA%\EquationAddIn`. To remove it all, run `uninst
 ## How it works
 
 ```
-picture ──► pix2tex (local AI model, GPU)  ─┐
-        └─► pix2text-mfr-1.5 (local AI, CPU) ┴─► cross-check:
-              both readings are the same equation?  ── yes ─► accept
-              no: pix2text-mfr confident (≥ 0.95)?  ── yes ─► accept its reading
-              no: pix2tex confident (≥ 0.99)?       ── yes ─► accept its reading
-              no ──► keep picture + review comment
-     accepted LaTeX ──► cleanup ──► MathML ──► OMML (MML2OMML.XSL from Office) ──► Word
+picture ──► pix2tex        (GPU) ─┐
+        ──► pix2text-mfr   (CPU) ─┼─► decide (server/decide.py):
+        ──► TexTeller 3    (GPU) ─┘     a majority of models read the same equation?     ─► accept
+                                         they differ only in a condition under ∑/lim/∫?   ─► flag (multi-line condition)
+                                         else the most trusted confident model             ─► accept
+                                         else                                              ─► flag, picture stays
+     accepted LaTeX ──► cleanup ──► MathML ──► OMML (MML2OMML.XSL from Office) ──► repaired Word objects ──► Word
+                                                                      every construct still present? no ─► flag
 ```
 
-Both models are small, specialised AI models that only read equations. Everything runs on your PC, with no internet after install.
+All three are specialised AI models that only read equations. They run at the same time, and everything stays on your PC, with no internet after install.
 
-| | pix2tex | pix2text-mfr-1.5 |
-|---|---|---|
-| Architecture | ViT + Transformer | TrOCR (vision encoder–decoder), ONNX |
-| Size | ~115 MB | ~115 MB |
-| Licence | MIT | MIT |
-| Reads correctly, alone (460 test images) | 312 | 429 |
+| | pix2tex | pix2text-mfr-1.5 | TexTeller 3 |
+|---|---|---|---|
+| Architecture | ViT + Transformer | TrOCR (vision encoder–decoder), ONNX | vision encoder–decoder (transformers) |
+| Training data | ~100 K formulas | — | 80 M formula images |
+| Size | ~115 MB | ~115 MB | ~1.2 GB |
+| Runs on | GPU | CPU | GPU |
+| Licence | MIT | MIT | Apache-2.0 |
+| Reads correctly, alone (460 test images) | 315 | 433 | 403 |
 
-**Why the cross-check:** across both benchmarks the two models agreed on 300 images and were wrong on only 3 of them. When they disagree, pix2text-mfr is right far more often. "The same equation" is decided by comparing normalised MathML (`server/compare.py`), so harmless spelling differences such as `{\frac{a}{b}}` vs `\frac{a}{b}` count as agreement. Set `EQ_CROSSCHECK=0` for the faster v1.2 behaviour, where the second model only sees images pix2tex is unsure about.
+**Why three:** when models agree, the reading is almost always right. On the benchmarks, two models agreed on 300 images and were wrong on only 3. With two models, though, a disagreement had to be settled by trust alone. TexTeller is weaker on its own across varied fonts, but as the third vote it settles those disagreements by majority. On the 360 physics/electrical images that gave 13 more correct readings, 6 fewer wrong ones, and 3 flagged instead of 10. "The same equation" is decided by comparing normalised MathML (`server/compare.py`), so harmless spelling differences such as `{\frac{a}{b}}` vs `\frac{a}{b}` count as agreement.
+
+The engine line-up, trust order and thresholds live in `server/config.json`. Set `EQ_CROSSCHECK=0` for a fast mode where engines are tried one after another and the first confident one wins.
 
 **Native Word objects** (`server/omml_fix.py`): Microsoft's MML2OMML.XSL gets several structures wrong. They are rewritten after conversion:
 
@@ -116,9 +121,10 @@ Two benchmarks, scored with `bench.py` (MathML-normalised comparison):
 |---|---|---|---|
 | v1.1 – pix2tex only | 75 correct, 2 wrong, 23 review | – | ~3.5 s in Word |
 | v1.2 – pix2tex, then pix2text-mfr if unsure | 96 correct, 4 wrong | 292 correct (81%), 56 wrong, 12 review | ~1.5–2.1 s |
-| **v1.3 – cross-check + cleanup (default)** | **100 correct, 0 wrong** | **329 correct (91%), 24 wrong, 7 review** | **~1.6–2.7 s** |
+| v1.3 – two-model cross-check + cleanup | 100 correct, 0 wrong | 329 correct (91%), 24 wrong, 7 review | ~1.6–2.7 s |
+| **v1.6 – three models, majority vote, output check** | **100 correct, 0 wrong** | **341 correct (95%), 16 wrong, 3 review** | **~1.2–1.8 s** |
 
-Physics/electrical v1.3 readings by font: Computer Modern 116/120, STIX 109/120, DejaVu Sans 107/120. The main remaining errors are inherent to the fonts: `I` vs `l` in sans-serif, `f` read as `/` in STIX, and `ε` vs `ϵ`.
+The remaining errors are mostly inherent to the fonts: `I` vs `l` in sans-serif, `f` read as `/` in STIX, and `ε` vs `ϵ`.
 
 ```powershell
 .venv\Scripts\python bench.py samples\physics_bench.docx samples\ground_truth_physics.json --rerun
@@ -143,9 +149,55 @@ Needs Visual Studio 2022 with the **Office/SharePoint development** workload.
 .\build.ps1 -Version 1.0.0     # -> dist\EquationAddIn-1.0.0.zip
 ```
 
-The first build creates a self-signed key `EquationAddIn_Key.pfx` for signing the manifests. It is git-ignored and never committed.
+The first build creates a self-signed key `EquationAddIn_Key.pfx` for signing the manifests. It is git-ignored and never committed. **The build runs the test suite first and refuses to package if anything fails.**
 
 For development without installing, point the add-in at your checkout with the `EQUATION_ADDIN_HOME` environment variable, and create `.venv` there as `installer\install.ps1` does.
+
+**Updating** an installed copy: run `install.bat` from a newer zip. It detects the existing installation and replaces only the program folders (`server`, `addin`). Python, PyTorch and the downloaded models are kept, so an update takes seconds, not a 3 GB download.
+
+## Project structure
+
+```
+server/
+  config.json        which OCR engines run, their order of trust and thresholds, idle exit
+  settings.py        reads config.json (environment variables override it for testing)
+  engines/           one module per OCR model: NAME, load(), read(rgb) -> (latex, confidence)
+    pix2tex.py         GPU, three scales, early stop when another engine agrees
+    pix2text_mfr.py    CPU, ONNX Runtime, own greedy decoder
+  core.py            orchestrator: runs every engine in parallel, cleans, converts, decides, logs
+  latex_cleanup.py   rules fixing model quirks and constructs Word renders badly
+  omml.py            LaTeX -> MathML -> OMML; refuses (Unexpressible) what it can't show correctly
+  omml_fix.py        repairs MML2OMML's structures; checks every LaTeX construct survived
+  decide.py          agreement / majority / trust-order rules
+  compare.py         "same equation?" via normalised MathML
+  app.py             local HTTP server (start on demand, idle exit)
+addin/EquationAddIn/ Word add-in (C#, VSTO): ribbon, side panel, background conversion
+tests/               strict test suite (below), stored benchmark readings, baseline scores
+samples/             benchmark generators and research scripts
+```
+
+**Adding an OCR model:** put a module in `server/engines/` with the same interface, and add its name to `config.json`. Nothing else changes: `core.py` runs it in parallel with the others, and `decide.py` includes it in the majority vote. Measure it first with `samples/collect_scores.py` and `samples/analyse_scores.py`.
+
+**Adding a cleanup rule or a Word-structure fix:** add a test case to `tests/test_omml.py` first, then the rule to `latex_cleanup.py` or `omml_fix.py`.
+
+## Tests
+
+```powershell
+.venv\Scripts\python tests\run_all.py           # ~5 s: structure, stability, refusals, decision replay
+.venv\Scripts\python tests\run_all.py --full    # + real OCR on both benchmarks (~15 min, GPU)
+.venv\Scripts\python tests\run_all.py --word    # + every structure case rendered by Word
+```
+
+| Stage | Checks |
+|---|---|
+| structure | each LaTeX construct reaches Word as the right OMML object (68 cases), and unexpressible output is refused |
+| stability | running the cleanup a second time changes nothing, on all 920 stored readings |
+| refusals | no correct benchmark reading is refused by the output check |
+| decisions | stored readings replayed through `decide.py`: correct ≥ baseline and wrong ≤ baseline (`tests/baseline.json`) |
+| full | the real models on both benchmarks, against the same baseline |
+| word | Word accepts every structure case; a PDF is written to `tests/out/` for visual review |
+
+If a change is meant to move the scores, rerun with `--update-baseline` and commit the new `tests/baseline.json` together with the change.
 
 ## Credits
 

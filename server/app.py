@@ -10,8 +10,9 @@ import time
 from fastapi import FastAPI, File, UploadFile
 
 import core
+import settings
 
-IDLE_EXIT = float(os.environ.get("EQ_IDLE_EXIT", "120"))
+IDLE_EXIT = settings.IDLE_EXIT
 app = FastAPI()
 last_used = time.monotonic()
 busy = 0
@@ -26,7 +27,7 @@ def idle_watchdog():
 
 @app.on_event("startup")
 def warm():
-    core.model()
+    core.warm()
     threading.Thread(target=idle_watchdog, daemon=True).start()
 
 

@@ -134,6 +134,18 @@ def spaces_safe(r):
 for lx in (r"=92.3\ \mathrm{N\cdot m}", r"=1.84~\mathrm{s}", r"=1.85\text{ kW}"):
     case(lx, spaces_safe, "space before a unit is a preserved non-breaking space")
 
+# hard_50 report: empty integrals, scripts on an empty base, single-row \substack, prescripts
+case(r"\int_{0}^{t}\neq\int_{\alpha}^{t}\neq\int_{O}^{t}", lambda r: "nary" not in tags(r) and text(r).count("∫") == 3,
+     "integral with no integrand: no placeholder box")
+case(r"\begin{array}{l}{\dot{x}}{{}_{1}=-\frac{R}{L}x_{1}}\\{\dot{x}}{{}_{2}=\frac{1}{C}x_{1}}\\\end{array}",
+     lambda r: all(len(s.find(M + "e")) for s in r.iter(M + "sSub")), "subscript on x-dot, not on an empty base")
+def two_rows(r):
+    return any(len(a.findall(M + "e")) == 2 for a in r.iter(M + "eqArr"))
+case(r"\sum_{\substack{i=1\,i\neq j}}^{n}a_{ij}", two_rows, "\\substack with \\, keeps two rows")
+case(r"\lim_{\substack{x\to 0\\y\to 0}}f", two_rows, "\\substack two-line limit")
+case(r"{}^{14}_{6}C", lambda r: "sPre" in tags(r), "prescripts as m:sPre")
+case(r"\int_0^1 x\,dx", lambda r: "nary" in tags(r), "normal integral unchanged")
+
 # standing rule: what cannot be expressed is refused, never emitted
 def refused(latex):
     try:

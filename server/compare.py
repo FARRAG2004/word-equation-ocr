@@ -4,10 +4,10 @@ import re
 from lxml import etree
 from latex2mathml.converter import convert as latex_to_mathml
 
-import core
+from latex_cleanup import tidy
 
 
-# Spellings that render identically; applied before comparison, after core.tidy() (which the
+# Spellings that render identically; applied before comparison, after tidy() (which the
 # pipeline itself applies, so tokenised output like "\operatorname { s i n }" is already "\sin").
 SPELLINGS = [
     (r"\{\\cal\s*([A-Za-z])\}", r"\\mathcal{\1}"),
@@ -45,7 +45,7 @@ def merge_numbers(root):
 
 def canon(latex):
     """Canonical MathML string: attributes, spacing and redundant mrows removed."""
-    s = core.tidy(latex)
+    s = tidy(latex)
     for pat, rep in SPELLINGS:
         s = re.sub(pat, rep, s)
     if r"\begin{array}{c}" in s and "&" in s and r"\begin{matrix}" not in s:

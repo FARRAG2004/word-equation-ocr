@@ -2,6 +2,10 @@
 param([string]$Version = "1.0.0")
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
+
+# Strict gate: nothing is packaged unless the test suite passes (see tests/run_all.py).
+& "$root\.venv\Scripts\python.exe" "$root\tests\run_all.py"
+if ($LASTEXITCODE) { throw "Tests failed - not packaging. Fix them, or run tests\run_all.py --update-baseline if a score change is intended." }
 $proj = Join-Path $root "addin\EquationAddIn"
 
 # Manifests must be signed; make a self-signed key on first build (never committed).
@@ -21,7 +25,8 @@ $stage = Join-Path $root "dist\EquationAddIn-$Version"
 Remove-Item $stage, "$stage.zip" -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force "$stage\addin", "$stage\server" | Out-Null
 Copy-Item "$proj\bin\Release\*" "$stage\addin" -Exclude *.pdb
-Copy-Item "$root\server\*.py" "$stage\server"
+Copy-Item "$root\server\*" "$stage\server" -Recurse -Exclude "__pycache__", "*.pyc"
+Get-ChildItem "$stage\server" -Recurse -Directory -Filter "__pycache__" | Remove-Item -Recurse -Force
 Copy-Item "$root\convert.py", "$root\requirements.txt", "$root\installer\*" $stage
 Compress-Archive "$stage\*" "$stage.zip"
 Write-Host "Packaged $stage.zip"

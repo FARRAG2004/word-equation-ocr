@@ -150,7 +150,42 @@ def fix_spaces(root):
             t.set(XML_SPACE, "preserve")
 
 
+def fix_empty_nary(root):
+    """An integral or sum with nothing after it (e.g. \\int_0^t \\neq ...) has an empty body, which Word
+    shows as a placeholder box. Write it as the operator symbol with its limits instead."""
+    for nary in list(root.iter(M + "nary")):
+        body = nary.find(M + "e")
+        if body is None or len(body) or (body.text or "").strip():
+            continue
+        chr_el = nary.find(f"{M}naryPr/{M}chr")
+        op = chr_el.get(M + "val") if chr_el is not None else "∫"
+        sub, sup = nary.find(M + "sub"), nary.find(M + "sup")
+        t = el("t")
+        t.text = op
+        base = el("e", el("r", t))
+        if sup is not None and len(sup) and sub is not None and len(sub):
+            new = el("sSubSup", base, el("sub", *list(sub)), el("sup", *list(sup)))
+        elif sub is not None and len(sub):
+            new = el("sSub", base, el("sub", *list(sub)))
+        elif sup is not None and len(sup):
+            new = el("sSup", base, el("sup", *list(sup)))
+        else:
+            new = base[0]
+        replace(nary, new)
+
+
+def fix_prescripts(root):
+    """{}^{14}_{6}C: scripts on an empty base are prescripts of what follows (m:sPre), not a dotted box."""
+    for s in list(root.iter(M + "sSubSup")):
+        base, nxt = s.find(M + "e"), s.getnext()
+        if base is None or len(base) or nxt is None or nxt.tag != M + "r":
+            continue
+        replace(s, el("sPre", el("sub", *list(s.find(M + "sub"))), el("sup", *list(s.find(M + "sup"))), el("e", nxt)))
+
+
 def fix(root):
+    fix_empty_nary(root)
+    fix_prescripts(root)
     fix_accents(root)
     fix_delimited(root)
     fix_limits(root)
@@ -159,9 +194,46 @@ def fix(root):
     return root
 
 
-def problems(root):
+import re as _re
+
+# LaTeX construct -> the OMML objects that must exist for it to have survived conversion
+CONSTRUCTS = [
+    (r"\\(?:underbrace|overbrace)\b", ("groupChr",), "brace"),
+    (r"\\binom\b", ("f",), "binomial"),
+    (r"\\(?:d|t|c)?frac\b", ("f",), "fraction"),
+    (r"\\sqrt\b", ("rad",), "root"),
+    (r"\\(?:vec|dot|ddot|hat|widehat|tilde|widetilde|overrightarrow|overleftarrow|check|breve|acute|grave)\b", ("acc",), "accent"),
+    (r"\\(?:bar|overline|underline)\b", ("bar", "acc"), "bar"),
+    (r"\\begin\{(?:p|b|v|V|B)?matrix\}", ("m", "eqArr"), "matrix"),
+    (r"\\begin\{cases\}", ("d",), "cases brace"),
+    # only operators with limits must become a structure; a bare \int is just the symbol
+    (r"\\(?:sum|prod|int|iint|iiint|oint|bigcup|bigcap|bigoplus|bigotimes)\s*[_^]", ("nary", "sSub", "sSup", "sSubSup", "limLow", "limUpp"), "big operator with limits"),
+]
+
+
+def lost_constructs(latex, root):
+    """Every construct written in the LaTeX must have its OMML object; report the ones that vanished."""
+    present = {}
+    for e in root.iter():
+        if isinstance(e.tag, str) and e.tag.startswith(M):
+            present[e.tag[len(M):]] = present.get(e.tag[len(M):], 0) + 1
+    lost = []
+    for pattern, tags, name in CONSTRUCTS:
+        wanted = len(_re.findall(pattern, latex))
+        if name == "fraction":  # binomials are no-bar fractions too
+            wanted += len(_re.findall(r"\\binom\b", latex))
+        have = sum(present.get(t, 0) for t in tags)
+        if wanted > have:
+            lost.append(f"{wanted - have} {name}{'s' if wanted - have > 1 else ''} lost in conversion")
+    rows = sum(1 for m in _re.finditer(r"\\substack\{([^{}]|\{[^{}]*\})*\}", latex) if "\\\\" in m.group(0))
+    if rows and not any(len(a.findall(M + "e")) > 1 for a in root.iter(M + "eqArr")):
+        lost.append("multi-line condition (\\substack) lost in conversion")
+    return lost
+
+
+def problems(root, latex=""):
     """What this OMML still cannot show correctly; empty list means it is safe to insert."""
-    found = []
+    found = lost_constructs(latex, root) if latex else []
     for t in root.iter(M + "t"):
         s = t.text or ""
         if "\\" in s:

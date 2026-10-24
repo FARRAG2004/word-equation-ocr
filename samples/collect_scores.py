@@ -12,9 +12,13 @@ import io
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "server"))
-import core, second  # noqa: E402
+import core  # noqa: E402
+import engines  # noqa: E402
+import settings  # noqa: E402
 from bench import images_with_ids, load_truth  # noqa: E402
 from compare import canon  # noqa: E402
+
+NAMES = [n for n, _ in settings.ENGINES]
 
 docx, truth_path, out = sys.argv[1:4]
 truth = load_truth(truth_path)
@@ -24,18 +28,23 @@ for (eq_id, cat), blob in images_with_ids(docx):
         continue
     t0 = time.time()
     rgb = Image.open(io.BytesIO(blob)).convert("RGB")
-    raw1, c1 = core.best_reading(rgb)
-    t1 = time.time() - t0
-    raw2, c2 = second.read(rgb)
-    A, B = core.tidy(raw1), core.tidy(raw2)
     gt = canon(truth[eq_id])
-    row = {"cat": cat, "A": A, "B": B, "c1": c1, "c2": c2,
-           "okA": bool(core.try_omml(A)) and canon(A) == gt, "okB": bool(core.try_omml(B)) and canon(B) == gt,
-           "agree": canon(A) == canon(B), "junkB": bool(core.JUNK.search(raw2)),
-           "omA": bool(core.try_omml(A)), "omB": bool(core.try_omml(B)),
-           "t_pix2tex": round(t1, 2), "t_total": round(time.time() - t0, 2)}
+    row = {"cat": cat, "readings": {}}
+    for name in NAMES:  # every configured engine, one after another, timed separately
+        t1 = time.time()
+        raw, conf = engines.get(name).read(rgb)
+        lx = core.tidy(raw)
+        row["readings"][name] = {"raw": raw, "latex": lx, "conf": conf, "seconds": round(time.time() - t1, 2),
+                                 "junk": bool(core.JUNK.search(raw)), "ok": bool(core.try_omml(lx)) and canon(lx) == gt}
+    # legacy fields (pix2tex = A, pix2text_mfr = B) used by older analyses
+    if {"pix2tex", "pix2text_mfr"} <= set(row["readings"]):
+        a, b = row["readings"]["pix2tex"], row["readings"]["pix2text_mfr"]
+        row.update(A=a["latex"], B=b["latex"], c1=a["conf"], c2=b["conf"], okA=a["ok"], okB=b["ok"],
+                   agree=canon(a["latex"]) == canon(b["latex"]), junkB=b["junk"],
+                   omA=bool(core.try_omml(a["latex"])), omB=bool(core.try_omml(b["latex"])),
+                   t_pix2tex=a["seconds"], t_total=a["seconds"] + b["seconds"])
     data[eq_id] = row
-    print(eq_id, cat, "A" if row["okA"] else "-", "B" if row["okB"] else "-", f"{row['t_total']}s", flush=True)
+    print(eq_id, cat, " ".join(f"{n}={'ok' if r['ok'] else '-'}" for n, r in row["readings"].items()), flush=True)
     if len(data) % 10 == 0:
         Path(out).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 Path(out).write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")

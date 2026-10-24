@@ -11,8 +11,15 @@ if (-not (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App 
 }
 Get-Process WINWORD -ErrorAction SilentlyContinue | ForEach-Object { throw "Please close Word and run the installer again." }
 
+$update = Test-Path (Join-Path $home_ ".venv\Scripts\python.exe")
+if ($update) { Write-Host "Existing installation found: updating the program only (Python, PyTorch and models are kept)." -ForegroundColor Green }
+
 Step "Copying files to $home_"
 New-Item -ItemType Directory -Force $home_ | Out-Null
+Get-CimInstance Win32_Process -Filter "Name='python.exe'" -ErrorAction SilentlyContinue |
+    Where-Object { $_.CommandLine -match "uvicorn app:app" } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+# program folders are replaced whole, so files removed in a new version do not linger; models and .venv stay
+foreach ($d in "server", "addin") { Remove-Item (Join-Path $home_ $d) -Recurse -Force -ErrorAction SilentlyContinue }
 Copy-Item "$src\server", "$src\addin", "$src\convert.py", "$src\requirements.txt", "$src\uninstall.ps1", "$src\uninstall.bat" $home_ -Recurse -Force
 
 Step "Finding Python 3.12"
@@ -34,6 +41,11 @@ $venvPy = Join-Path $home_ ".venv\Scripts\python.exe"
 if (-not (Test-Path $venvPy)) { & $python -m venv (Join-Path $home_ ".venv") }
 & $venvPy -m pip install --quiet --upgrade pip
 
+$hasTorch = $false
+try { & $venvPy -c "import torch, sys; sys.exit(0 if torch.__version__.startswith('2.6.0') else 1)" 2>$null; $hasTorch = ($LASTEXITCODE -eq 0) } catch { }
+if ($hasTorch) {
+    Write-Host "PyTorch 2.6.0 already installed."
+} else {
 Step "Installing PyTorch (this is the big download, 1-3 GB)"
 if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
     Write-Host "NVIDIA GPU found: installing CUDA build"
@@ -44,14 +56,15 @@ if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
 }
 & $venvPy -m pip install --quiet torch==2.6.0 torchvision==0.21.0 --index-url $index
 if ($LASTEXITCODE) { throw "PyTorch install failed." }
+}
 
 Step "Installing OCR libraries"
 & $venvPy -m pip install --quiet -r (Join-Path $home_ "requirements.txt")
 if ($LASTEXITCODE) { throw "Library install failed." }
 
-Step "Downloading the two OCR models (pix2tex ~115 MB, pix2text-mfr ~115 MB) and testing the pipeline"
+Step "Loading the OCR models (downloaded only if missing) and testing the pipeline"
 Push-Location (Join-Path $home_ "server")
-& $venvPy -c "import core, second; core.model(); second.load(); print('OMML test:', core.latex_to_omml('E=mc^2')[:30], '...')"
+& $venvPy -c "import core; core.warm(); print('OMML test:', core.latex_to_omml('E=mc^2')[:30], '...')"
 $ok = -not $LASTEXITCODE
 Pop-Location
 if (-not $ok) { throw "Model/pipeline test failed." }
@@ -76,5 +89,5 @@ New-ItemProperty $key LoadBehavior -Value 3 -PropertyType DWord -Force | Out-Nul
 New-Item -Force "HKCU:\Software\EquationAddIn" | Out-Null
 Set-ItemProperty "HKCU:\Software\EquationAddIn" Home $home_
 
-Write-Host "`nDone! Open Word: you will find an 'Equations' tab with the 'Convert equation images' button." -ForegroundColor Green
+Write-Host "`nDone! Open Word and use the 'Equations' tab." -ForegroundColor Green
 Write-Host "The first time, Word may ask whether to install the customization: click Install."

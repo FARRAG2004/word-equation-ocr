@@ -1,6 +1,5 @@
-"""Second-opinion OCR model: pix2text-mfr-1.5 (TrOCR, MIT licence, 115 MB) run with onnxruntime.
+"""pix2text-mfr-1.5 (TrOCR, MIT licence, 115 MB) on the CPU with onnxruntime.
 
-Only used for images pix2tex is unsure about; loaded on first use, so it costs nothing otherwise.
 Greedy decoding is done here (no optimum/transformers needed) so we also get token confidence.
 """
 import math
@@ -9,8 +8,11 @@ import os
 import numpy as np
 from PIL import Image
 
+from settings import MODELS_DIR
+
+NAME = "pix2text_mfr"
 REPO = "breezedeus/pix2text-mfr-1.5"
-MODEL_DIR = os.environ.get("EQ_MFR_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models", "pix2text-mfr-1.5"))
+MODEL_DIR = os.environ.get("EQ_MFR_DIR", os.path.join(MODELS_DIR, "pix2text-mfr-1.5"))
 BOS, EOS, MAX_TOKENS = 1, 2, 512
 
 _enc = _dec = _tok = None

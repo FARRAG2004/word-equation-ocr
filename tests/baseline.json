@@ -1,0 +1,10 @@
+{
+ "replay": {
+  "sample100": {"correct": 100, "wrong": 0, "flagged": 0},
+  "physics360": {"correct": 341, "wrong": 16, "flagged": 3}
+ },
+ "full": {
+  "sample100": {"correct": 100, "wrong": 0, "flagged": 0},
+  "physics360": {"correct": 341, "wrong": 16, "flagged": 3}
+ }
+}
